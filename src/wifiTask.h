@@ -9,6 +9,6 @@
 #ifndef _WIFITASK_H_
 #define _WIFITASK_H_
 
-uint32_t wifiTask(void);
+void wifiTask(void* p_params);
 
 #endif // _WIFITASK_H_
