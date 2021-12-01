@@ -9,5 +9,6 @@ extern Share<int32_t> enc1_RPS;
 extern Share<int32_t> enc2_RPS;
 extern Share<int32_t> enc3_RPS;
 extern Share<int32_t> enc4_RPS;
+extern Share<uint32_t> signal;
 
 #endif // _SHARES_H_

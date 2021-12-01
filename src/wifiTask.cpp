@@ -15,7 +15,7 @@
  * @details 
  * @returns
 */
-uint32_t wifiTask(void)
+void wifiTask(void* p_params)
 {
     const char *ssid = "yourAP";    // Arbitrary ssid to connect to on device
     WiFiServer server(80);          // Set web server at port 80
@@ -29,11 +29,12 @@ uint32_t wifiTask(void)
     Serial.println(myIP);                             // Print access point
     server.begin();                                   // Blank line
     Serial.println("Server started");                 // Print statement
+    uint32_t _signal = 0;
     for(;;)
     {
-        const char* host = "192.168.4.1";           // The address we will return things to, which is our IP address
-        const char* streamId   = "....................";// Not sure
-        const char* privateKey = "....................";// Not sure
+        //const char* host = "192.168.4.1";           // The address we will return things to, which is our IP address
+        //const char* streamId   = "....................";// Not sure
+        //const char* privateKey = "....................";// Not sure
         WiFiClient client = server.available();         // listen for incoming clients
         String PWM;                                     // PWM String from http
         String angle;                                   // Angle String from http
@@ -65,29 +66,16 @@ uint32_t wifiTask(void)
                         angle = thetaOne+thetaTwo+thetaThree; // Total angle as a string of characters
                         PWM = pwmOne+pwmTwo; // Total PWM as a string of characters
                         String str_signal = pwmOne+pwmTwo+thetaOne+thetaTwo+thetaThree; // Total signal as a string
-                        signal = str_signal.toInt(); // Convert to integer
+                        _signal = str_signal.toInt(); // Convert to integer
                         Serial.println("PWM signal is: ");
                         Serial.println(PWM);
                         Serial.println("Angle signal is: ");
                         Serial.println(angle);
-                        return signal;
+                        signal.put(_signal);
                     }
-                    // Below section sets the value of variables defined in class (.h) to different values depending
-                    // on the ending of the http request
-                    if (currentLine.endsWith("GET /START")) 
-                    {
-                        mot_enab = 1;
-                        return mot_enab;
-                    }
-                    if (currentLine.endsWith("GET /END")) 
-                    {
-                        mot_enab = 0;
-                        return mot_enab;
-                    }   
                 } 
             } 
         } 
-        return mot_enab;  // If there is no client, return anyway (fixes "control reaches end of non-void function")
         vTaskDelay(5); // Delay 5ms in task
         }
 }
