@@ -19,19 +19,20 @@ I'm thinking this should be a task and FL, FR, BL, and BR_PWM should be shared v
 #include <Arduino.h>
 #include "controller.h"
 
+float FL_motor = 0;
+float FR_motor = 0;
+float BL_motor = 0;
+float BR_motor = 0;
+uint8_t FL_PWM = 0;
+uint8_t FR_PWM = 0;
+uint8_t BL_PWM = 0;
+uint8_t BR_PWM = 0;
+const uint8_t max_PWM = 255;
+const uint8_t max_SPD = 10;
+
 void compute (uint16_t dir, uint16_t mag)
 {
-    const uint8_t max_PWM = 255;
-
-    float FL_motor = 0;
-    float FR_motor = 0;
-    float BL_motor = 0;
-    float BR_motor = 0;
-
-    uint8_t FL_PWM = 0;
-    uint8_t FR_PWM = 0;
-    uint8_t BL_PWM = 0;
-    uint8_t BR_PWM = 0;
+    
 
     //If panning E / NE
     if (dir >= 0 && dir < 90)
@@ -71,10 +72,11 @@ void compute (uint16_t dir, uint16_t mag)
 
     mag = mag/100;
 
+    /*
     FL_PWM = dir*mag*max_PWM;
     FL_PWM = dir*mag*max_PWM;
     FL_PWM = dir*mag*max_PWM;
     FL_PWM = dir*mag*max_PWM;
-
+    */
 
 }
