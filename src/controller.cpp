@@ -9,17 +9,29 @@
     and takes encoder readings to adjust PWM to achive desired speed. 
 */
 
-//NOTE: Incomplete. Will take in the shared 
+/*NOTE: Incomplete. Not sure if this shoukd be a task of its own or simply a function called by the motor driver. 
 
+Controller function takes a direction input and creates a scaler for the desired speed on each motor. This will 
+then be multiplied by the desired overall nominal speed to get the nominal speed for each motor.
+
+I'm thinking this should be a task and FL, FR, BL, and BR_PWM should be shared variables that go to the motor driver
+*/
 #include <Arduino.h>
 #include "controller.h"
 
-void direction (uint16_t dir)
+void compute (uint16_t dir, uint16_t mag)
 {
-    int FL_motor = 0;
-    int FR_motor = 0;
-    int BL_motor = 0;
-    int BR_motor = 0;
+    const uint8_t max_PWM = 255;
+
+    float FL_motor = 0;
+    float FR_motor = 0;
+    float BL_motor = 0;
+    float BR_motor = 0;
+
+    uint8_t FL_PWM = 0;
+    uint8_t FR_PWM = 0;
+    uint8_t BL_PWM = 0;
+    uint8_t BR_PWM = 0;
 
     //If panning E / NE
     if (dir >= 0 && dir < 90)
@@ -56,4 +68,13 @@ void direction (uint16_t dir)
         BL_motor = -1 + 2*((dir-270)/90);
         BR_motor = -1;
     }
+
+    mag = mag/100;
+
+    FL_PWM = dir*mag*max_PWM;
+    FL_PWM = dir*mag*max_PWM;
+    FL_PWM = dir*mag*max_PWM;
+    FL_PWM = dir*mag*max_PWM;
+
+
 }
