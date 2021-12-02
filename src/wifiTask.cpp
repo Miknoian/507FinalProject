@@ -22,7 +22,6 @@ void wifiTask(void* p_params)
     const char *ssid = "yourAP";    // Arbitrary ssid to connect to on device
     WiFiServer server(80);          // Set web server at port 80
     String header;                  // Storing the HTTP request
-    Serial.begin(115200);                             // Set baud rate for serial communication
     Serial.println();                                 // Print a blank line to serial monitor
     Serial.println("Configuring access point...");    // Print statement
     WiFi.softAP(ssid);                                // Set ESP to be a soft access point with specified SSID
@@ -51,7 +50,8 @@ void wifiTask(void* p_params)
             while (client.connected())                  // While client is connected to access point
             {
                 if (client.available())                 // check if there are unread characters from the request
-                {          
+                {           
+                    Serial.print("Here");
                     char c = client.read();             // c stores the current character we are reading
                     Serial.write(c);
                     if (c != '\r')                      // If anything but a carriage return
@@ -64,15 +64,25 @@ void wifiTask(void* p_params)
                         pwmTwo = currentLine[6];  //6th Character in header (second number in PWM)
                         thetaOne = currentLine[7];
                         thetaTwo = currentLine[8];
-                        thetaThree = currentLine[9];  
+                        thetaThree = currentLine[9]; 
+                        Serial.println("currentLine[5] is: ");
+                        Serial.println(currentLine[5]); 
+                        Serial.println("currentLine[6] is: ");
+                        Serial.println(currentLine[6]); 
+                        Serial.println("currentLine[7] is: ");
+                        Serial.println(currentLine[7]); 
+                        Serial.println("currentLine[8] is: ");
+                        Serial.println(currentLine[8]); 
+                        Serial.println("currentLine[9] is: ");
+                        Serial.println(currentLine[9]); 
                         angle = thetaOne+thetaTwo+thetaThree; // Total angle as a string of characters
                         PWM = pwmOne+pwmTwo; // Total PWM as a string of characters
                         String str_signal = pwmOne+pwmTwo+thetaOne+thetaTwo+thetaThree; // Total signal as a string
                         _signal = str_signal.toInt(); // Convert to integer
-                        Serial.println("PWM signal is: ");
-                        Serial.println(PWM);
-                        Serial.println("Angle signal is: ");
-                        Serial.println(angle);
+                        //Serial.println("PWM signal is: ");
+                        // Serial.println(PWM);
+                        // Serial.println("Angle signal is: ");
+                        // Serial.println(angle);
                         signal.put(_signal);
                     }
                 } 
