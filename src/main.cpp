@@ -14,7 +14,18 @@ Share<int32_t> enc1_RPS ("sneed1");
 Share<int32_t> enc2_RPS ("sneed2");
 Share<int32_t> enc3_RPS ("sneed3");
 Share<int32_t> enc4_RPS ("sneed4");
+
 Share<uint32_t> signal  ("sneed5");
+
+Share<uint8_t> FL_mag   ("sneed6");
+Share<uint8_t> FR_mag   ("sneed7");
+Share<uint8_t> BL_mag   ("sneed8");
+Share<uint8_t> BR_mag   ("sneed9");
+
+Share<bool> FL_dir   ("sneed10");
+Share<bool> FR_dir   ("sneed11");
+Share<bool> BL_dir   ("sneed12");
+Share<bool> BR_dir   ("sneed13");
 
 void setup() 
 {
@@ -54,12 +65,12 @@ void setup()
     //             1,
     //             NULL);
 
-    // xTaskCreate (task_controller,
-    //              "Controller",                    // Task name for printouts
-    //              8192,                            // Stack size
-    //              NULL,                            // Parameters for task fn.
-    //              2,                               // Priority
-    //              NULL);                           // Task handle
+    xTaskCreate (task_controller,
+                 "Controller",                    // Task name for printouts
+                 8192,                            // Stack size
+                 NULL,                            // Parameters for task fn.
+                 2,                               // Priority
+                 NULL);                           // Task handle
 
 
     xTaskCreate (task_encoder,

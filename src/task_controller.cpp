@@ -14,26 +14,40 @@
 Controller function takes a direction input and creates a scaler for the desired speed on each motor. This will 
 then be multiplied by the desired overall nominal speed to get the nominal speed for each motor.
 
-I'm thinking this should be a task and FL, FR, BL, and BR_PWM should be shared variables that go to the motor driver
+I'm thinking this should be a task and FL, FR, BL, and BR_mag should be shared variables that go to the motor driver
 */
 #include <Arduino.h>
 #include <PrintStream.h>
 #include "task_controller.h"
 #include "shares.h"
 
-void task_controller (uint16_t dir, uint16_t mag)
+void set_direction (uint8_t dir)
+    {
+
+    }
+
+void task_controller (void* p_params)
 {
     float FL_motor = 0;
     float FR_motor = 0;
     float BL_motor = 0;
     float BR_motor = 0;
-    uint8_t FL_PWM = 0;
-    uint8_t FR_PWM = 0;
-    uint8_t BL_PWM = 0;
-    uint8_t BR_PWM = 0;
-    const uint8_t max_PWM = 255;
-    const uint8_t max_SPD = 10;
+    
+    FL_mag.put(0);
+    FR_mag.put(0);
+    BL_mag.put(0);
+    BR_mag.put(0);
 
+    FL_dir.put(0);
+    FR_dir.put(0);
+    BL_dir.put(0);
+    BR_dir.put(0);
+    
+    uint8_t dir = 0;
+    uint8_t mag = 1;
+
+    //const uint8_t max_PWM = 255;
+    //const uint8_t max_SPD = 10;
 
     for (;;)
     {
@@ -73,14 +87,10 @@ void task_controller (uint16_t dir, uint16_t mag)
             BR_motor = -1;
         }
 
-        mag = mag/100;
-
-        /*
-        FL_PWM = dir*mag*max_PWM;
-        FL_PWM = dir*mag*max_PWM;
-        FL_PWM = dir*mag*max_PWM;
-        FL_PWM = dir*mag*max_PWM;
-        */
+        FL_mag.put(FL_motor*mag);
+        FR_mag.put(FR_motor*mag);
+        BL_mag.put(BL_motor*mag);
+        BR_mag.put(BR_motor*mag);
     }
 
 }
