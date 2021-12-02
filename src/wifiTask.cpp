@@ -50,11 +50,11 @@ void wifiTask(void* p_params)
             String currentLine = "";                    // 'currentLine' stores the current line of the request
             while (client.connected())                  // While client is connected to access point
             {
-                Serial.println("Client.available is: ");
+                //Serial.println("Client.available is: ");
                 Serial.println(client.available());
                 if (client.available())                 // check if there are unread characters from the request
                 {           
-                    Serial.print("If client available loop");
+                    //Serial.print("If client available loop");
                     char c = client.read();             // c stores the current character we are reading
                     Serial.write(c);
                     if (c != '\r')                      // If anything but a carriage return
@@ -68,21 +68,24 @@ void wifiTask(void* p_params)
                         thetaOne = currentLine[7];
                         thetaTwo = currentLine[8];
                         thetaThree = currentLine[9]; 
-                        Serial.println("currentLine[5] is: ");
-                        Serial.println(currentLine[5]); 
-                        Serial.println("currentLine[6] is: ");
-                        Serial.println(currentLine[6]); 
-                        Serial.println("currentLine[7] is: ");
-                        Serial.println(currentLine[7]); 
-                        Serial.println("currentLine[8] is: ");
-                        Serial.println(currentLine[8]); 
-                        Serial.println("currentLine[9] is: ");
-                        Serial.println(currentLine[9]); 
+                        // Serial.println("currentLine[5] is: ");
+                        // Serial.println(currentLine[5]); 
+                        // Serial.println("currentLine[6] is: ");
+                        // Serial.println(currentLine[6]); 
+                        // Serial.println("currentLine[7] is: ");
+                        // Serial.println(currentLine[7]); 
+                        // Serial.println("currentLine[8] is: ");
+                        // Serial.println(currentLine[8]); 
+                        // Serial.println("currentLine[9] is: ");
+                        // Serial.println(currentLine[9]); 
                         angle = thetaOne+thetaTwo+thetaThree;                       // Total angle as a string of characters
                         PWM = pwmOne+pwmTwo;                                        // Total PWM as a string of characters
                         str_signal = pwmOne+pwmTwo+thetaOne+thetaTwo+thetaThree;    // Total signal as a string
                         _signal = str_signal.toInt();                               // Convert to integer
                         signal.put(_signal);                                        // Set shared variable to signal integer
+                        Serial.println("Signal is: ");
+                        Serial.println(_signal);
+                        break;
                     }
                 } 
             } 
