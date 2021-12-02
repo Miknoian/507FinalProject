@@ -4,4 +4,4 @@
  *  @date   11/30/2021
  */
  
-void task_controller (void* p_params);
+void compute (void* p_params);

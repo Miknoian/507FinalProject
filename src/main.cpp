@@ -5,8 +5,7 @@
 #include "taskshare.h"
 #include "shares.h"
 #include "wifiTask.h"
-#include "task_motor.h"             // Header for motor driver module
-#include "task_controller.h"        // Header for motor controller
+#include "task_motor.h"           // Header for motor driver module
 
 // sneed
 
@@ -24,13 +23,10 @@ void setup()
 
     ledcAttachPin(33, 0);
     ledcAttachPin(25, 1);
-
-    ledcAttachPin(14, 2);
+    ledcAttachPin(26, 2);
     ledcAttachPin(27, 3);
-
     ledcAttachPin(18, 4);
     ledcAttachPin(19, 5);
-
     ledcAttachPin(17, 6);
     ledcAttachPin(5, 7);
 
@@ -47,61 +43,53 @@ void setup()
     delay (2000);
     Serial << endl << endl << "Hello, I am an RTOS demonstration" << endl;
 
-    // xTaskCreate (wifiTask,
-    //             "WIFI",
-    //             8192,
-    //             NULL,
-    //             1,
-    //             NULL);
+    xTaskCreate (wifiTask,
+                "WIFI",
+                8192,
+                NULL,
+                1,
+                NULL);
 
-    // xTaskCreate (task_controller,
-    //              "Controller",                    // Task name for printouts
+    // xTaskCreate (task_encoder,
+    //              "ENC",                           // Task name for printouts
     //              8192,                            // Stack size
     //              NULL,                            // Parameters for task fn.
     //              2,                               // Priority
     //              NULL);                           // Task handle
 
+    // xTaskCreate (task_motor_0,
+    //              "Driver0",                         // Task name for printouts
+    //              4096,                              // Stack size
+    //              NULL,                              // Parameters for task fn.
+    //              3,                                 // Priority
+    //              NULL);                             // Task handle
 
-    xTaskCreate (task_encoder,
-                 "ENC",                           // Task name for printouts
-                 8192,                            // Stack size
-                 NULL,                            // Parameters for task fn.
-                 2,                               // Priority
-                 NULL);                           // Task handle
-
-    xTaskCreate (task_motor_0,
-                 "Driver0",                         // Task name for printouts
-                 4096,                              // Stack size
-                 NULL,                              // Parameters for task fn.
-                 3,                                 // Priority
-                 NULL);                             // Task handle
-
-    // Create a task which manages motor 1
+    // // Create a task which manages motor 1
     
-    xTaskCreate (task_motor_1,
-                 "Driver1",                         // Task name for printouts
-                 4096,                              // Stack size
-                 NULL,                              // Parameters for task fn.
-                 3,                                 // Priority
-                 NULL);                             // Task handle            
+    // xTaskCreate (task_motor_1,
+    //              "Driver1",                         // Task name for printouts
+    //              4096,                              // Stack size
+    //              NULL,                              // Parameters for task fn.
+    //              3,                                 // Priority
+    //              NULL);                             // Task handle            
     
-    // Create a task which manages motor 2
+    // // Create a task which manages motor 2
     
-    xTaskCreate (task_motor_2,
-                 "Driver1",                         // Task name for printouts
-                 4096,                              // Stack size
-                 NULL,                              // Parameters for task fn.
-                 3,                                 // Priority
-                 NULL);                             // Task handle            
+    // xTaskCreate (task_motor_2,
+    //              "Driver1",                         // Task name for printouts
+    //              4096,                              // Stack size
+    //              NULL,                              // Parameters for task fn.
+    //              3,                                 // Priority
+    //              NULL);                             // Task handle            
     
-    // Create a task which manages motor 3
+    // // Create a task which manages motor 3
     
-    xTaskCreate (task_motor_3,
-                 "Driver1",                         // Task name for printouts
-                 4096,                              // Stack size
-                 NULL,                              // Parameters for task fn.
-                 3,                                 // Priority
-                 NULL);                             // Task handle
+    // xTaskCreate (task_motor_3,
+    //              "Driver1",                         // Task name for printouts
+    //              4096,                              // Stack size
+    //              NULL,                              // Parameters for task fn.
+    //              3,                                 // Priority
+    //              NULL);                             // Task handle
 }
 
 void loop() {
