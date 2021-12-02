@@ -37,6 +37,8 @@ For these motors, copy paste the following into the setup of the main file:
 
 //Pins we cant use for PWM:    34, 35, 36, 37, 38, 39
 
+uint32_t mag = 0;
+
 void task_motor_0 (void* p_params)
 {
     
@@ -47,60 +49,131 @@ void task_motor_0 (void* p_params)
 
     //Create motor object
     Motor Motor_0 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
-
+    //FL
     for (;;)
     {
-        Motor_0.run(0, 1);
-        vTaskDelay(5);
+        mag = stickMag.get();
+        //North
+        Motor_0.run(mag, 1);
+        vTaskDelay(2000);
+
+        //East
+        mag = stickMag.get();
+        Motor_0.run(mag, 0);
+        vTaskDelay(2000);
+
+        //South
+        mag = stickMag.get();
+        Motor_0.run(mag, 0);
+        vTaskDelay(2000);
+
+        //West
+        mag = stickMag.get();
+        Motor_0.run(mag, 1);
+        vTaskDelay(2000);
+
         //Serial.print(enc3_RPS.get());
         //Serial << endl;
+    
     }
 }
 
 void task_motor_1 (void* p_params)
 {
-    uint8_t MOTOR_IN1 = 26;
+    uint8_t MOTOR_IN1 = 14;
     uint8_t MOTOR_IN2 = 27;
     uint8_t PWM_Ch1 = 2;
     uint8_t PWM_Ch2 = 3;
 
     Motor Motor_1 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
-    
+    //BL
     for (;;)
     {
-        Motor_1.run(1, 1);
-        vTaskDelay(5);
+        mag = stickMag.get();
+        //North
+        Motor_1.run(mag, 1);
+        vTaskDelay(2000);
+
+        //East
+        mag = stickMag.get();
+        Motor_1.run(mag, 1);
+        vTaskDelay(2000);
+
+        //South
+        mag = stickMag.get();
+        Motor_1.run(mag, 0);
+        vTaskDelay(2000);
+
+        //West
+        mag = stickMag.get();
+        Motor_1.run(mag, 0);
+        vTaskDelay(2000);
     }
 }
 
 void task_motor_2 (void* p_params)
 {
-    uint8_t MOTOR_IN1 = 18;
-    uint8_t MOTOR_IN2 = 19;
+    uint8_t MOTOR_IN2 = 18;
+    uint8_t MOTOR_IN1 = 19;
     uint8_t PWM_Ch1 = 4;
     uint8_t PWM_Ch2 = 5;
 
     Motor Motor_2 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
-    
+    //FR
     for (;;)
     {
-        Motor_2.run(2, 1);
-        vTaskDelay(5);
+        
+        //North
+        mag = stickMag.get();
+        Motor_2.run(mag, 1);
+        vTaskDelay(2000);
+
+        //East
+        mag = stickMag.get();
+        Motor_2.run(mag, 1);
+        vTaskDelay(2000);
+
+        //South
+        mag = stickMag.get();
+        Motor_2.run(mag, 0);
+        vTaskDelay(2000);
+
+        //West
+        mag = stickMag.get();
+        Motor_2.run(mag, 0);
+        vTaskDelay(2000);
     }
 }
 
 void task_motor_3 (void* p_params)
 {
-    uint8_t MOTOR_IN1 = 17;
-    uint8_t MOTOR_IN2 = 5;
+    uint8_t MOTOR_IN2 = 17;
+    uint8_t MOTOR_IN1 = 5;
     uint8_t PWM_Ch1 = 6;
     uint8_t PWM_Ch2 = 7;
 
     Motor Motor_3 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
-    
+    //BR
     for (;;)
     {
-        Motor_3.run(3, 1);
-        vTaskDelay(5);
+        //North
+        mag = stickMag.get();
+        Motor_3.run(mag, 1);
+        vTaskDelay(2000); 
+        
+        //East
+        mag = stickMag.get();
+        Motor_3.run(mag, 0);
+        vTaskDelay(2000);
+        
+        //South
+        mag = stickMag.get();
+        Motor_3.run(mag, 0);
+        vTaskDelay(2000);
+
+        //West
+        mag = stickMag.get();
+        Motor_3.run(mag, 1);
+        vTaskDelay(2000);
     }
 }

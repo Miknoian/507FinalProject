@@ -21,28 +21,26 @@ I'm thinking this should be a task and FL, FR, BL, and BR_PWM should be shared v
 #include "task_controller.h"
 #include "shares.h"
 
-
-float FL_motor = 0;
-float FR_motor = 0;
-float BL_motor = 0;
-float BR_motor = 0;
-uint8_t FL_PWM = 0;
-uint8_t FR_PWM = 0;
-uint8_t BL_PWM = 0;
-uint8_t BR_PWM = 0;
-const uint8_t max_PWM = 255;
-const uint8_t max_SPD = 10;
-uint32_t dir = 0;
-uint16_t mag = 0;
-
 void task_controller (void* p_params)
-{ 
+{   
+    float FL_motor = 0;
+    float FR_motor = 0;
+    float BL_motor = 0;
+    float BR_motor = 0;
+    uint8_t FL_PWM = 0;
+    uint8_t FR_PWM = 0;
+    uint8_t BL_PWM = 0;
+    uint8_t BR_PWM = 0;
+    const uint8_t max_PWM = 255;
+    const uint8_t max_SPD = 10;
+    uint32_t dir = 0;
+    //uint16_t mag = 0;
     for(;;)
     {
-        dir = stickAngle.get();
-        Serial.println("Angle share is: ");
-        Serial.println(dir);
-        mag = stickMag.get();
+        //dir = stickAngle.get();
+        //Serial.println("Angle share is: ");
+        //Serial.println(dir);
+        //mag = stickMag.get();
         //If panning E / NE
         if (dir >= 0 && dir < 90)
         {
@@ -78,8 +76,8 @@ void task_controller (void* p_params)
             BL_motor = -1 + 2*((dir-270)/90);
             BR_motor = -1;
         }
-
-        mag = mag/100;
+        vTaskDelay(5);
+        //mag = mag/100;
 
         /*
         FL_PWM = dir*mag*max_PWM;

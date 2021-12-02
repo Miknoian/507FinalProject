@@ -47,7 +47,8 @@ void wifiTask(void* p_params)
         const char* privateKey = "....................";// Not sure
         WiFiClient client = server.available();         // listen for incoming clients
         if (client)                                     // if a new client connects
-        {                           
+        {  
+            Serial.print("Connected");                         
             String currentLine = "";                    // 'currentLine' stores the current line of the request
             while (client.connected())                  // While client is connected to access point
             {
