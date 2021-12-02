@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <PrintStream.h>
 #include "task_encoder.h"
+#include "task_controller.h"
 #include "taskqueue.h"
 #include "taskshare.h"
 #include "shares.h"
@@ -14,6 +15,8 @@ Share<int32_t> enc2_RPS ("sneed2");
 Share<int32_t> enc3_RPS ("sneed3");
 Share<int32_t> enc4_RPS ("sneed4");
 Share<uint32_t> signal  ("sneed5");
+Share<uint32_t> stickAngle  ("sneed6");
+Share<uint32_t> stickMag  ("sneed7");
 
 void setup() 
 {
@@ -49,6 +52,13 @@ void setup()
                 NULL,
                 1,
                 NULL);
+
+    xTaskCreate (task_controller,
+            "Controller",
+            8192,
+            NULL,
+            1,
+            NULL);
 
     // xTaskCreate (task_encoder,
     //              "ENC",                           // Task name for printouts

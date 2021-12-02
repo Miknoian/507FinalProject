@@ -1,7 +1,10 @@
-/** @file   controller.h
- * 
- *  @author Joshua Hoye
- *  @date   11/30/2021
- */
- 
-void compute (void* p_params);
+#ifndef _TASK_CONTROLLER_H_
+#define _TASK_CONTROLLER_H_
+
+#include <Arduino.h>
+#include <PrintStream.h>
+#include <ESP32Encoder.h>
+
+void task_controller (void* p_params);
+
+#endif

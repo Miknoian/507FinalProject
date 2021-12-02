@@ -38,7 +38,8 @@ void wifiTask(void* p_params)
     String thetaOne;                                // First character in angle string
     String thetaTwo;                                // Second character in angle string
     String thetaThree;                              // Third character in angle string
-    String str_signal;
+    // String str_signal;
+    
     for(;;)
     {   
         const char* host = "192.168.4.1";           // The address we will return things to, which is our IP address
@@ -51,7 +52,7 @@ void wifiTask(void* p_params)
             while (client.connected())                  // While client is connected to access point
             {
                 //Serial.println("Client.available is: ");
-                Serial.println(client.available());
+                // Serial.println(client.available());
                 if (client.available())                 // check if there are unread characters from the request
                 {           
                     //Serial.print("If client available loop");
@@ -80,16 +81,19 @@ void wifiTask(void* p_params)
                         // Serial.println(currentLine[9]); 
                         angle = thetaOne+thetaTwo+thetaThree;                       // Total angle as a string of characters
                         PWM = pwmOne+pwmTwo;                                        // Total PWM as a string of characters
-                        str_signal = pwmOne+pwmTwo+thetaOne+thetaTwo+thetaThree;    // Total signal as a string
-                        _signal = str_signal.toInt();                               // Convert to integer
-                        signal.put(_signal);                                        // Set shared variable to signal integer
-                        Serial.println("Signal is: ");
-                        Serial.println(_signal);
+                        //Serial.println("Angle is: ");
+                        //Serial.println(angle.toInt());
+                        // Serial.println("Mag is: ");
+                        // Serial.println(PWM.toInt());
+                        stickAngle.put(angle.toInt());
+                        stickMag.put(PWM.toInt());
+                        
+                        //Serial.println(stickAngle.get());
                         break;
                     }
                 } 
             } 
         } 
-        //vTaskDelay(1); // Delay 5ms in task
+        vTaskDelay(5); // Delay 5ms in task
         }
 }
