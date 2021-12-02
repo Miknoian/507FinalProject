@@ -50,7 +50,7 @@ void task_motor_0 (void* p_params)
 
     for (;;)
     {
-        Motor_0.run(0, 1);
+        Motor_0.run(80, 0);
         vTaskDelay(5);
         //Serial.print(enc3_RPS.get());
         //Serial << endl;
@@ -59,7 +59,7 @@ void task_motor_0 (void* p_params)
 
 void task_motor_1 (void* p_params)
 {
-    uint8_t MOTOR_IN1 = 26;
+    uint8_t MOTOR_IN1 = 14;
     uint8_t MOTOR_IN2 = 27;
     uint8_t PWM_Ch1 = 2;
     uint8_t PWM_Ch2 = 3;
@@ -68,7 +68,7 @@ void task_motor_1 (void* p_params)
     
     for (;;)
     {
-        Motor_1.run(1, 1);
+        Motor_1.run(80, 1);
         vTaskDelay(5);
     }
 }
@@ -84,7 +84,7 @@ void task_motor_2 (void* p_params)
     
     for (;;)
     {
-        Motor_2.run(2, 1);
+        Motor_2.run(80, 0);
         vTaskDelay(5);
     }
 }
@@ -100,7 +100,7 @@ void task_motor_3 (void* p_params)
     
     for (;;)
     {
-        Motor_3.run(3, 1);
-        vTaskDelay(5);
+        Motor_3.run(80, 1);
+        vTaskDelay(5); 
     }
 }
