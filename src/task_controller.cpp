@@ -17,66 +17,70 @@ then be multiplied by the desired overall nominal speed to get the nominal speed
 I'm thinking this should be a task and FL, FR, BL, and BR_PWM should be shared variables that go to the motor driver
 */
 #include <Arduino.h>
-#include "controller.h"
+#include <PrintStream.h>
+#include "task_controller.h"
+#include "shares.h"
 
-float FL_motor = 0;
-float FR_motor = 0;
-float BL_motor = 0;
-float BR_motor = 0;
-uint8_t FL_PWM = 0;
-uint8_t FR_PWM = 0;
-uint8_t BL_PWM = 0;
-uint8_t BR_PWM = 0;
-const uint8_t max_PWM = 255;
-const uint8_t max_SPD = 10;
-
-void compute (uint16_t dir, uint16_t mag)
+void task_controller (uint16_t dir, uint16_t mag)
 {
-    
+    float FL_motor = 0;
+    float FR_motor = 0;
+    float BL_motor = 0;
+    float BR_motor = 0;
+    uint8_t FL_PWM = 0;
+    uint8_t FR_PWM = 0;
+    uint8_t BL_PWM = 0;
+    uint8_t BR_PWM = 0;
+    const uint8_t max_PWM = 255;
+    const uint8_t max_SPD = 10;
 
-    //If panning E / NE
-    if (dir >= 0 && dir < 90)
+
+    for (;;)
     {
-        FL_motor = -1 + 2*(dir/90);
-        FR_motor = 1;
-        BL_motor = 1;
-        BR_motor = -1 + 2*(dir/90);
+        //If panning E / NE
+        if (dir >= 0 && dir < 90)
+        {
+            FL_motor = -1 + 2*(dir/90);
+            FR_motor = 1;
+            BL_motor = 1;
+            BR_motor = -1 + 2*(dir/90);
+        }
+
+        //If panning N/NW
+        if (dir-90 >= 0 && dir-90 < 90)
+        {
+            FL_motor = 1;
+            FR_motor = 1-2*((dir-90)/90);
+            BL_motor = 1-2*((dir-90)/90);
+            BR_motor = 1;
+        }
+
+        //If panning W/SW
+        if (dir-180 >= 0 && dir-180 < 90)
+        {
+            FL_motor = 1-2*((dir-180)/90);
+            FR_motor = -1;
+            BL_motor = -1;
+            BR_motor = 1-2*((dir-180)/90);
+        }
+
+        //If panning S/SE
+        if (dir-270 >= 0 && dir-270 < 90)
+        {
+            FL_motor = -1;
+            FR_motor = -1 + 2*((dir-270)/90);
+            BL_motor = -1 + 2*((dir-270)/90);
+            BR_motor = -1;
+        }
+
+        mag = mag/100;
+
+        /*
+        FL_PWM = dir*mag*max_PWM;
+        FL_PWM = dir*mag*max_PWM;
+        FL_PWM = dir*mag*max_PWM;
+        FL_PWM = dir*mag*max_PWM;
+        */
     }
-
-    //If panning N/NW
-    if (dir-90 >= 0 && dir-90 < 90)
-    {
-        FL_motor = 1;
-        FR_motor = 1-2*((dir-90)/90);
-        BL_motor = 1-2*((dir-90)/90);
-        BR_motor = 1;
-    }
-
-    //If panning W/SW
-    if (dir-180 >= 0 && dir-180 < 90)
-    {
-        FL_motor = 1-2*((dir-180)/90);
-        FR_motor = -1;
-        BL_motor = -1;
-        BR_motor = 1-2*((dir-180)/90);
-    }
-
-    //If panning S/SE
-    if (dir-270 >= 0 && dir-270 < 90)
-    {
-        FL_motor = -1;
-        FR_motor = -1 + 2*((dir-270)/90);
-        BL_motor = -1 + 2*((dir-270)/90);
-        BR_motor = -1;
-    }
-
-    mag = mag/100;
-
-    /*
-    FL_PWM = dir*mag*max_PWM;
-    FL_PWM = dir*mag*max_PWM;
-    FL_PWM = dir*mag*max_PWM;
-    FL_PWM = dir*mag*max_PWM;
-    */
 
 }
