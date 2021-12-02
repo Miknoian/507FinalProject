@@ -7,6 +7,8 @@
  * @returns signal An integer value containing data of radius and angle of movement
 */
 
+#include <Arduino.h>
+#include <PrintStream.h>
 #include <WiFi.h>
 #include "wifiTask.h"
 #include "shares.h"
