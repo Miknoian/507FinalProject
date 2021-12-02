@@ -36,6 +36,8 @@ void wifiTask(void* p_params)
         //const char* host = "192.168.4.1";           // The address we will return things to, which is our IP address
         //const char* streamId   = "....................";// Not sure
         //const char* privateKey = "....................";// Not sure
+        
+        //Should this be in setup?? v v v 
         WiFiClient client = server.available();         // listen for incoming clients
         String PWM;                                     // PWM String from http
         String angle;                                   // Angle String from http
@@ -44,6 +46,8 @@ void wifiTask(void* p_params)
         String thetaOne;                                // First character in angle string
         String thetaTwo;                                // Second character in angle string
         String thetaThree;                              // Third character in angle string
+        // ^ ^ ^ ^
+        
         if (client)                                     // if a new client connects
         {                             
             String currentLine = "";                    // 'currentLine' stores the current line of the request
