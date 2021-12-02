@@ -5,10 +5,11 @@
 #include <WiFi.h>
 #include "shares.h"
 
-const TickType_t ENCODER_PERIOD = 500;
+const TickType_t ENCODER_PERIOD = 5;
 
 const uint8_t INPUT1 = 32;
-const uint8_t INPUT2 = 35;
+const uint8_t INPUT2 = 35; // doesnt work
+//const uint8_t INPUT2 = ;
 
 const uint8_t INPUT3 = 10;
 const uint8_t INPUT4 = 15; // potential replacement for non-functional pin 6
