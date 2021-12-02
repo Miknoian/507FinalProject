@@ -4,9 +4,10 @@
  *  @date   11/30/2021
  */
 #include <Arduino.h>
-//#include <PrintStream.h>
+#include <PrintStream.h>
 #include "task_motor.h"
 #include "class_motor.h"
+#include "shares.h"
 
 /*
 NOTE: PINS MUST BE DECLARED IN MAIN FILE!
@@ -50,7 +51,9 @@ void task_motor_0 (void* p_params)
     for (;;)
     {
         Motor_0.run(0, 1);
-        vTaskDelay(1000);
+        vTaskDelay(5);
+        //Serial.print(enc3_RPS.get());
+        //Serial << endl;
     }
 }
 
@@ -66,7 +69,7 @@ void task_motor_1 (void* p_params)
     for (;;)
     {
         Motor_1.run(1, 1);
-        vTaskDelay(5000);
+        vTaskDelay(5);
     }
 }
 
@@ -82,7 +85,7 @@ void task_motor_2 (void* p_params)
     for (;;)
     {
         Motor_2.run(2, 1);
-        vTaskDelay(5000);
+        vTaskDelay(5);
     }
 }
 
@@ -98,6 +101,6 @@ void task_motor_3 (void* p_params)
     for (;;)
     {
         Motor_3.run(3, 1);
-        vTaskDelay(5000);
+        vTaskDelay(5);
     }
 }
