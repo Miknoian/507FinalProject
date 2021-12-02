@@ -45,12 +45,12 @@ void setup()
     delay (2000);
     Serial << endl << endl << "Hello, I am an RTOS demonstration" << endl;
 
-    xTaskCreate (wifiTask,
-                "WIFI",
-                8192,
-                NULL,
-                1,
-                NULL);
+    // xTaskCreate (wifiTask,
+    //             "WIFI",
+    //             8192,
+    //             NULL,
+    //             1,
+    //             NULL);
 
     xTaskCreate (task_encoder,
                  "ENC",                           // Task name for printouts
@@ -63,7 +63,7 @@ void setup()
                  "Driver0",                         // Task name for printouts
                  4096,                              // Stack size
                  NULL,                              // Parameters for task fn.
-                 1,                                 // Priority
+                 2,                                 // Priority
                  NULL);                             // Task handle
 
     // Create a task which manages motor 1
@@ -72,7 +72,7 @@ void setup()
                  "Driver1",                         // Task name for printouts
                  4096,                              // Stack size
                  NULL,                              // Parameters for task fn.
-                 1,                                 // Priority
+                 2,                                 // Priority
                  NULL);                             // Task handle            
     
     // Create a task which manages motor 2
@@ -81,7 +81,7 @@ void setup()
                  "Driver1",                         // Task name for printouts
                  4096,                              // Stack size
                  NULL,                              // Parameters for task fn.
-                 1,                                 // Priority
+                 2,                                 // Priority
                  NULL);                             // Task handle            
     
     // Create a task which manages motor 3
@@ -90,7 +90,7 @@ void setup()
                  "Driver1",                         // Task name for printouts
                  4096,                              // Stack size
                  NULL,                              // Parameters for task fn.
-                 1,                                 // Priority
+                 2,                                 // Priority
                  NULL);                             // Task handle
 }
 
