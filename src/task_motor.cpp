@@ -53,28 +53,8 @@ void task_motor_0 (void* p_params)
     for (;;)
     {
         mag = stickMag.get();
-        //North
         Motor_0.run(mag, 1);
         vTaskDelay(2000);
-
-        //East
-        mag = stickMag.get();
-        Motor_0.run(mag, 0);
-        vTaskDelay(2000);
-
-        //South
-        mag = stickMag.get();
-        Motor_0.run(mag, 0);
-        vTaskDelay(2000);
-
-        //West
-        mag = stickMag.get();
-        Motor_0.run(mag, 1);
-        vTaskDelay(2000);
-
-        //Serial.print(enc3_RPS.get());
-        //Serial << endl;
-    
     }
 }
 

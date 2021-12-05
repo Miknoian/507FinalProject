@@ -49,12 +49,12 @@ void setup()
     delay (2000);
     Serial << endl << endl << "Hello, I am an RTOS demonstration" << endl;
 
-    xTaskCreate (wifiTask,
-                "WIFI",
-                8192,
-                NULL,
-                1,
-                NULL);
+    // xTaskCreate (wifiTask,
+    //             "WIFI",
+    //             8192,
+    //             NULL,
+    //             1,
+    //             NULL);
 
     xTaskCreate (task_controller,
             "Controller",
@@ -63,12 +63,12 @@ void setup()
             1,
             NULL);
 
-    // xTaskCreate (task_encoder,
-    //              "ENC",                           // Task name for printouts
-    //              16384,                            // Stack size
-    //              NULL,                            // Parameters for task fn.
-    //              2,                               // Priority
-    //              NULL);                           // Task handle
+    xTaskCreate (task_encoder,
+                 "ENC",                           // Task name for printouts
+                 16384,                            // Stack size
+                 NULL,                            // Parameters for task fn.
+                 2,                               // Priority
+                 NULL);                           // Task handle
 
      xTaskCreate (task_motor_0,
                   "Driver0",                         // Task name for printouts
