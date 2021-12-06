@@ -1,6 +1,6 @@
 /** @file wifiTask.h
- *  @author 
- *  @date 
+ *  @brief Header for WiFi Task
+ *  @author Daniel Freeman
  */
 
 #include <Arduino.h>
@@ -9,6 +9,8 @@
 #ifndef _WIFITASK_H_
 #define _WIFITASK_H_
 
+
+///@brief Function for WiFi
 void wifiTask(void* p_params);
 
 #endif // _WIFITASK_H_

@@ -1,3 +1,9 @@
+/** @file main.cpp
+ * @brief Main function to run all tasks
+ * @details Sets up shared variables, sets up pinmode for PWM and then runs tasks based on priorites and run time
+ * @author Mark Iknoian, Daniel Freeman, Joshua Hoye
+ * @date 05-Dec-2021
+*/
 #include <Arduino.h>
 #include <PrintStream.h>
 #include "task_encoder.h"
@@ -8,15 +14,12 @@
 #include "wifiTask.h"
 #include "task_motor.h"           // Header for motor driver module
 
-// sneed
-
-Share<int32_t> enc1_RPS ("sneed1");
-Share<int32_t> enc2_RPS ("sneed2");
-Share<int32_t> enc3_RPS ("sneed3");
-Share<int32_t> enc4_RPS ("sneed4");
-Share<uint32_t> signal  ("sneed5");
-Share<uint32_t> stickAngle  ("sneed6");
-Share<uint32_t> stickMag  ("sneed7");
+Share<int32_t> enc1_RPS ("sneed1");     /// Share for encoder 1 data in rad/s
+Share<int32_t> enc2_RPS ("sneed2");     /// Share for encoder 2 data in rad/s
+Share<int32_t> enc3_RPS ("sneed3");     /// Share for encoder 3 data in rad/s
+Share<int32_t> enc4_RPS ("sneed4");     /// Share for encoder 4 data in rad/s
+Share<uint32_t> stickAngle  ("sneed6"); /// Share for joystick angle in degrees
+Share<uint32_t> stickMag  ("sneed7");   /// Share for joystick velocity
 
 void setup() 
 {
