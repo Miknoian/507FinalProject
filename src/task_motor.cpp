@@ -41,7 +41,6 @@ uint32_t mag = 0;
 
 void task_motor_0 (void* p_params)
 {
-    
     uint8_t MOTOR_IN1 = 33;
     uint8_t MOTOR_IN2 = 25;
     uint8_t PWM_Ch1 = 0;

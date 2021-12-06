@@ -7,17 +7,21 @@
 
 const TickType_t ENCODER_PERIOD = 5;
 
-const uint8_t INPUT1 = 32;
-const uint8_t INPUT2 = 35;
+//Encoder 1
+const uint8_t INPUT1 = 16;
+const uint8_t INPUT2 = 4;
 
-const uint8_t INPUT3 = 10;
-const uint8_t INPUT4 = 34; // potential replacement for non-functional pin 6
+//Encoder 2
+const uint8_t INPUT3 = 23;
+const uint8_t INPUT4 = 26;  // potential replacement for non-functional pin 1
 
-const uint8_t INPUT5 = 16;
-const uint8_t INPUT6 = 4;
+//Encoder 3
+const uint8_t INPUT5 = 10;
+const uint8_t INPUT6 = 34; // potential replacement for non-functional pin 6
 
-const uint8_t INPUT7 = 23;
-const uint8_t INPUT8 = 26;  // potential replacement for non-functional pin 1
+//Encoder 4
+const uint8_t INPUT7 = 32;
+const uint8_t INPUT8 = 35;
 
 void task_encoder (void* p_params)
 {
