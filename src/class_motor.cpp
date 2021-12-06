@@ -30,7 +30,7 @@ void Motor::run (uint8_t PWM, bool dir)
     {
         ledcWrite(PWM_Ch1, 0);
         ledcWrite(PWM_Ch2, PWM);
-        Serial << "PWM: " << PWM << " forward on channel " << PWM_Ch2 << endl;
+        //Serial << "PWM: " << PWM << " forward on channel " << PWM_Ch2 << endl;
     }
     else
 
@@ -38,7 +38,7 @@ void Motor::run (uint8_t PWM, bool dir)
     {
         ledcWrite(PWM_Ch2, 0);
         ledcWrite(PWM_Ch1, PWM);
-        Serial << "PWM: " << PWM << " backward on channel " << PWM_Ch1 << endl;
+        //Serial << "PWM: " << PWM << " backward on channel " << PWM_Ch1 << endl;
     }
 }
 

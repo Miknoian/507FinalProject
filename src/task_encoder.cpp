@@ -7,21 +7,21 @@
 
 const TickType_t ENCODER_PERIOD = 5;
 
+//Encoder 0
+const uint8_t INPUT1 = 32;
+const uint8_t INPUT2 =35;
+
 //Encoder 1
-const uint8_t INPUT1 = 16;
-const uint8_t INPUT2 = 4;
+const uint8_t INPUT3 = 10;
+const uint8_t INPUT4 = 34;  // potential replacement for non-functional pin 1
 
 //Encoder 2
-const uint8_t INPUT3 = 23;
-const uint8_t INPUT4 = 26;  // potential replacement for non-functional pin 1
+const uint8_t INPUT5 = 23; //23, 26
+const uint8_t INPUT6 = 26; // potential replacement for non-functional pin 6
 
 //Encoder 3
-const uint8_t INPUT5 = 10;
-const uint8_t INPUT6 = 34; // potential replacement for non-functional pin 6
-
-//Encoder 4
-const uint8_t INPUT7 = 32;
-const uint8_t INPUT8 = 35;
+const uint8_t INPUT7 = 16;
+const uint8_t INPUT8 = 4;
 
 void task_encoder (void* p_params)
 {
@@ -32,56 +32,60 @@ void task_encoder (void* p_params)
     // delay(2000);
     // Serial.println("wifi setup complete");
 
-    ESP32Encoder encoder1; 
-    encoder1.attachFullQuad(INPUT1, INPUT2);
+    ESP32Encoder encoder0; 
+    encoder0.attachFullQuad(INPUT1, INPUT2);
+    encoder0.setCount(0);
+    encoder0.resumeCount();
+
+    ESP32Encoder encoder1;
+    encoder1.attachFullQuad(INPUT3, INPUT4);
     encoder1.setCount(0);
     encoder1.resumeCount();
 
-    ESP32Encoder encoder2;
-    encoder2.attachFullQuad(INPUT3, INPUT4);
+    ESP32Encoder encoder2; 
+    encoder2.attachFullQuad(INPUT5, INPUT6);
     encoder2.setCount(0);
     encoder2.resumeCount();
 
-    ESP32Encoder encoder3; 
-    encoder3.attachFullQuad(INPUT5, INPUT6);
+    ESP32Encoder encoder3;
+    encoder3.attachFullQuad(INPUT7, INPUT8);
     encoder3.setCount(0);
     encoder3.resumeCount();
 
-    ESP32Encoder encoder4;
-    encoder4.attachFullQuad(INPUT7, INPUT8);
-    encoder4.setCount(0);
-    encoder4.resumeCount();
-
     TickType_t xLastWakeTime = xTaskGetTickCount();
 
+    float enc0RotVel = 0;
     float enc1RotVel = 0;
     float enc2RotVel = 0;
     float enc3RotVel = 0;
-    float enc4RotVel = 0;
 
+    int32_t enc0PrevPos = 0;
     int32_t enc1PrevPos = 0;
     int32_t enc2PrevPos = 0;
     int32_t enc3PrevPos = 0;
-    int32_t enc4PrevPos = 0;
 
     uint32_t previousTime = 0;
     uint32_t currentTime = 0;
 
     for(;;)
     {
-        // Serial.print("Enc1: ");
+        // Serial.print("enc0: ");
+        // Serial.print(String((int32_t)encoder0.getCount()));
+        // Serial.print(" enc1: ");
         // Serial.print(String((int32_t)encoder1.getCount()));
-        // Serial.print(" Enc2: ");
+        // Serial.print(" enc2: ");
         // Serial.print(String((int32_t)encoder2.getCount()));
-        // Serial.print(" Enc3: ");
+        // Serial.print(" enc3: ");
         // Serial.print(String((int32_t)encoder3.getCount()));
-        // Serial.print(" Enc4: ");
-        // Serial.print(String((int32_t)encoder4.getCount()));
         // Serial << endl;
 
         previousTime = currentTime;
         currentTime = xTaskGetTickCount();
         
+        enc0RotVel = ((encoder0.getCount()-enc0PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);
+        enc0PrevPos = encoder0.getCount();
+        enc0_RPS.put(enc0RotVel);
+
         enc1RotVel = ((encoder1.getCount()-enc1PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);
         enc1PrevPos = encoder1.getCount();
         enc1_RPS.put(enc1RotVel);
@@ -94,11 +98,7 @@ void task_encoder (void* p_params)
         enc3PrevPos = encoder3.getCount();
         enc3_RPS.put(enc3RotVel);
 
-        enc4RotVel = ((encoder4.getCount()-enc4PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);
-        enc4PrevPos = encoder4.getCount();
-        enc4_RPS.put(enc4RotVel);
-
-        // Serial.println(enc1RotVel);
+        // Serial.println(enc0RotVel);
 
         vTaskDelayUntil (&xLastWakeTime, ENCODER_PERIOD);
     }

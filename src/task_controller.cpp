@@ -41,25 +41,19 @@ void task_controller (void* p_params)
     int32_t pwm[] = {0,0,0,0};
 
     float P_gain = 1;
-    float I_gain = 1;
+    float I_gain = .001;
 
-
-    //The specified output to the motor to achive ideal speed
-    uint8_t FL_pwm = 0;
-    uint8_t FR_pwm = 0;
-    uint8_t BL_pwm = 0;
-    uint8_t BR_pwm = 0;
-
-    const uint8_t max_pwm = 255;
-    const int32_t max_Speed = 10;
+    const uint32_t max_pwm = 255;
+    const int32_t max_Speed = 50;
     
     uint32_t dir = 0;
     float mag = 0;
 
     for(;;)
     {
-        mag = stickMag.get()/100;   //make mag a scaler from 0-1.
-        dir = stickAngle.get();
+        mag = 1;//stickMag.get()/100;   //make mag a scaler from 0-1.
+        //Serial << "Original mag is: " << mag << endl;
+        dir = 90;//stickAngle.get();
         //Serial.println("Angle share is: ");
         //Serial.println(dir);
        
@@ -75,6 +69,7 @@ void task_controller (void* p_params)
         //If panning N/NW
         if (dir-90 >= 0 && dir-90 < 90)
         {
+            //Serial << "Moving North" << endl;
             FL_relativeSpeed = 1;
             FR_relativeSpeed = 1-2*((dir-90)/90);
             BL_relativeSpeed = 1-2*((dir-90)/90);
@@ -100,30 +95,45 @@ void task_controller (void* p_params)
         }
         vTaskDelay(5);
         
+        //Serial << "Mag: " << mag << " Relative Speed: " << FL_relativeSpeed << " Max speed: " << max_Speed << endl;
         idealSpeed[0] = mag*FL_relativeSpeed*max_Speed;
+        //Serial << "Ideal Speed is " << idealSpeed[0] << endl;
         idealSpeed[1] = mag*BL_relativeSpeed*max_Speed;
         idealSpeed[2] = mag*FR_relativeSpeed*max_Speed;
         idealSpeed[3] = mag*BR_relativeSpeed*max_Speed;
 
         realSpeed[0] = enc0_RPS.get();
+        Serial << "Real Speed is " << realSpeed[2] << endl;
         realSpeed[1] = enc1_RPS.get();
         realSpeed[2] = enc2_RPS.get();
         realSpeed[3] = enc3_RPS.get();
 
-        for (uint8_t n=0; n >= 3; n++)
+        for (int n=0; n <= 3; n++)
         {
             pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain;
+            //Serial << n << "PWM_P is " << pwm[n] << endl;
             integral_error[n] += idealSpeed[n]-realSpeed[n];
             
             pwm[n] += integral_error[n]*I_gain;
 
-            if (pwm[n] > 255)
+            //Serial << n << "PWM_I is " << integral_error[n]*I_gain << endl;
+            if (pwm[n] > max_pwm)
             {
-                pwm[n] = 255;
+                pwm[n] = max_pwm;
             }
 
         }
+        //Serial << "I_Error is " << integral_error[0] << endl;
 
+        //Serial << "PWM is " << pwm[0] << endl << endl << endl;
+        //Serial.println("PWM is: ");
+        //Serial.println(pwm[0]);
+
+        //Serial << pwm[0] << endl;
+        FL_pwm.put(pwm[0]);
+        BL_pwm.put(pwm[1]);
+        FR_pwm.put(pwm[2]);
+        BR_pwm.put(pwm[3]);
 
         /*
         FL_pwm = dir*mag*max_pwm;

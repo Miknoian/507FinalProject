@@ -51,7 +51,7 @@ void task_motor_0 (void* p_params)
     //FL
     for (;;)
     {
-        mag = stickMag.get();
+        mag = FL_pwm.get();
         Motor_0.run(mag, 1);
         vTaskDelay(2000);
     }
@@ -68,25 +68,9 @@ void task_motor_1 (void* p_params)
     //BL
     for (;;)
     {
-        mag = stickMag.get();
-        //North
+        mag = BL_pwm.get();
         Motor_1.run(mag, 1);
-        vTaskDelay(2000);
-
-        //East
-        mag = stickMag.get();
-        Motor_1.run(mag, 1);
-        vTaskDelay(2000);
-
-        //South
-        mag = stickMag.get();
-        Motor_1.run(mag, 0);
-        vTaskDelay(2000);
-
-        //West
-        mag = stickMag.get();
-        Motor_1.run(mag, 0);
-        vTaskDelay(2000);
+        vTaskDelay(5);
     }
 }
 
@@ -102,25 +86,10 @@ void task_motor_2 (void* p_params)
     for (;;)
     {
         
-        //North
-        mag = stickMag.get();
+        mag = FR_pwm.get();
         Motor_2.run(mag, 1);
-        vTaskDelay(2000);
+        vTaskDelay(5);
 
-        //East
-        mag = stickMag.get();
-        Motor_2.run(mag, 1);
-        vTaskDelay(2000);
-
-        //South
-        mag = stickMag.get();
-        Motor_2.run(mag, 0);
-        vTaskDelay(2000);
-
-        //West
-        mag = stickMag.get();
-        Motor_2.run(mag, 0);
-        vTaskDelay(2000);
     }
 }
 
@@ -135,24 +104,9 @@ void task_motor_3 (void* p_params)
     //BR
     for (;;)
     {
-        //North
-        mag = stickMag.get();
+        //
+        mag = BR_pwm.get();
         Motor_3.run(mag, 1);
-        vTaskDelay(2000); 
-        
-        //East
-        mag = stickMag.get();
-        Motor_3.run(mag, 0);
-        vTaskDelay(2000);
-        
-        //South
-        mag = stickMag.get();
-        Motor_3.run(mag, 0);
-        vTaskDelay(2000);
-
-        //West
-        mag = stickMag.get();
-        Motor_3.run(mag, 1);
-        vTaskDelay(2000);
+        vTaskDelay(5); 
     }
 }
