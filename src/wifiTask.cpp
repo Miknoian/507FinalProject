@@ -30,7 +30,6 @@ void wifiTask(void* p_params)
     Serial.println(myIP);                             // Print access point
     server.begin();                                   // Blank line
     Serial.println("Server started");                 // Print statement
-    uint32_t _signal = 0;                           // Total signal (for use in this file)
     String PWM;                                     // PWM String from http
     String angle;                                   // Angle String from http
     String pwmOne;                                  // First character in PWM string
@@ -38,13 +37,12 @@ void wifiTask(void* p_params)
     String thetaOne;                                // First character in angle string
     String thetaTwo;                                // Second character in angle string
     String thetaThree;                              // Third character in angle string
-    // String str_signal;
     
     for(;;)
     {   
         const char* host = "192.168.4.1";           // The address we will return things to, which is our IP address
-        const char* streamId   = "....................";// Not sure
-        const char* privateKey = "....................";// Not sure
+        //const char* streamId   = "....................";// Not sure
+        //const char* privateKey = "....................";// Not sure
         WiFiClient client = server.available();         // listen for incoming clients
         if (client)                                     // if a new client connects
         {  
@@ -58,7 +56,7 @@ void wifiTask(void* p_params)
                 {           
                     //Serial.print("If client available loop");
                     char c = client.read();             // c stores the current character we are reading
-                    Serial.write(c);
+                    //Serial.write(c);
                     if (c != '\r')                      // If anything but a carriage return
                     {  
                         currentLine += c;               // add it to the end of the currentLine
@@ -82,19 +80,17 @@ void wifiTask(void* p_params)
                         // Serial.println(currentLine[9]); 
                         angle = thetaOne+thetaTwo+thetaThree;                       // Total angle as a string of characters
                         PWM = pwmOne+pwmTwo;                                        // Total PWM as a string of characters
-                        //Serial.println("Angle is: ");
-                        //Serial.println(angle.toInt());
-                        // Serial.println("Mag is: ");
-                        // Serial.println(PWM.toInt());
+                        Serial.println("WiFi Task Angle is: ");
+                        Serial.println(angle.toInt());
+                        Serial.println("WiFi Task PWM is: ");
+                        Serial.println(PWM.toInt());
+                        stickMag.put(PWM.toInt()); 
                         stickAngle.put(angle.toInt());
-                        stickMag.put(PWM.toInt());
-                        
-                        //Serial.println(stickAngle.get());
                         break;
                     }
                 } 
             } 
         } 
-        vTaskDelay(5); // Delay 5ms in task
-        }
+        vTaskDelay(10); // Delay 5ms in task
+        }//vTaskDelay(100);
 }
