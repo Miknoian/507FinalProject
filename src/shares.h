@@ -5,10 +5,10 @@
 #include "taskshare.h"
 
 // A share which holds a counter of how many times a simulated event occurred
-extern Share<int32_t> enc0_RPS;
-extern Share<int32_t> enc1_RPS;
-extern Share<int32_t> enc2_RPS;
-extern Share<int32_t> enc3_RPS;
+extern Share<float> enc0_RPS;
+extern Share<float> enc1_RPS;
+extern Share<float> enc2_RPS;
+extern Share<float> enc3_RPS;
 
 // extern Share<uint32_t> signal;
 extern Share<uint32_t> stickAngle;

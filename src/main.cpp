@@ -9,10 +9,10 @@
 #include "task_motor.h"           // Header for motor driver module
 
 // sneed
-Share<int32_t> enc0_RPS ("sneed1");
-Share<int32_t> enc1_RPS ("sneed2");
-Share<int32_t> enc2_RPS ("sneed3");
-Share<int32_t> enc3_RPS ("sneed4");
+Share<float> enc0_RPS ("sneed1");
+Share<float> enc1_RPS ("sneed2");
+Share<float> enc2_RPS ("sneed3");
+Share<float> enc3_RPS ("sneed4");
 
 //Share<uint32_t> signal  ("sneed5");
 
@@ -69,17 +69,17 @@ void setup()
     //             NULL);
 
     xTaskCreate (task_controller,
-            "Controller",
-            16384,
-            NULL,
-            1,
-            NULL);
+                "Controller",
+                16384,
+                NULL,
+                2,
+                NULL);
 
     xTaskCreate (task_encoder,
                  "ENC",                           // Task name for printouts
                  16384,                            // Stack size
                  NULL,                            // Parameters for task fn.
-                 2,                               // Priority
+                 4,                               // Priority
                  NULL);                           // Task handle
 
      xTaskCreate (task_motor_0,

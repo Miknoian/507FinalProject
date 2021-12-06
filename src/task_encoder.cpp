@@ -79,6 +79,7 @@ void task_encoder (void* p_params)
         // Serial.print(String((int32_t)encoder3.getCount()));
         // Serial << endl;
 
+
         previousTime = currentTime;
         currentTime = xTaskGetTickCount();
         
@@ -98,7 +99,7 @@ void task_encoder (void* p_params)
         enc3PrevPos = encoder3.getCount();
         enc3_RPS.put(enc3RotVel);
 
-        // Serial.println(enc0RotVel);
+        Serial.println(enc0RotVel);
 
         vTaskDelayUntil (&xLastWakeTime, ENCODER_PERIOD);
     }

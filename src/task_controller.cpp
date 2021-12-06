@@ -36,7 +36,7 @@ void task_controller (void* p_params)
     // int32_t BR_idealSpeed = 0;
 
     int32_t idealSpeed[] = {0,0,0,0};
-    int32_t realSpeed[] = {0,0,0,0};
+    float realSpeed[] = {0,0,0,0};
     int32_t integral_error[] = {0,0,0,0};
     int32_t pwm[] = {0,0,0,0};
 
@@ -103,10 +103,10 @@ void task_controller (void* p_params)
         idealSpeed[3] = mag*BR_relativeSpeed*max_Speed;
 
         realSpeed[0] = enc0_RPS.get();
-        Serial << "Real Speed is " << realSpeed[2] << endl;
         realSpeed[1] = enc1_RPS.get();
         realSpeed[2] = enc2_RPS.get();
         realSpeed[3] = enc3_RPS.get();
+        //Serial << "Real Speed is " << realSpeed[0] << endl;
 
         for (int n=0; n <= 3; n++)
         {
