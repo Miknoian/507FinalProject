@@ -5,11 +5,9 @@
 #include <WiFi.h>
 #include "shares.h"
 
-const TickType_t ENCODER_PERIOD = 5;
-
 //Encoder 0
 const uint8_t INPUT1 = 32;
-const uint8_t INPUT2 =35;
+const uint8_t INPUT2 = 35;
 
 //Encoder 1
 const uint8_t INPUT3 = 10;
@@ -25,12 +23,6 @@ const uint8_t INPUT8 = 4;
 
 void task_encoder (void* p_params)
 {
-    // Serial.println("wifi setup start");
-    // delay(2000);
-    // WiFi.mode(WIFI_AP);
-    // WiFi.disconnect();
-    // delay(2000);
-    // Serial.println("wifi setup complete");
 
     ESP32Encoder encoder0; 
     encoder0.attachFullQuad(INPUT1, INPUT2);
@@ -52,8 +44,6 @@ void task_encoder (void* p_params)
     encoder3.setCount(0);
     encoder3.resumeCount();
 
-    TickType_t xLastWakeTime = xTaskGetTickCount();
-
     float enc0RotVel = 0;
     float enc1RotVel = 0;
     float enc2RotVel = 0;
@@ -66,6 +56,8 @@ void task_encoder (void* p_params)
 
     uint32_t previousTime = 0;
     uint32_t currentTime = 0;
+
+    
 
     for(;;)
     {
@@ -82,6 +74,12 @@ void task_encoder (void* p_params)
 
         previousTime = currentTime;
         currentTime = xTaskGetTickCount();
+
+        // Serial.println("currentTime  ");
+        // Serial.print(currentTime);
+        // Serial.print("prevTime  ");
+        // Serial.println(previousTime);
+        
         
         enc0RotVel = ((encoder0.getCount()-enc0PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);
         enc0PrevPos = encoder0.getCount();
@@ -99,8 +97,22 @@ void task_encoder (void* p_params)
         enc3PrevPos = encoder3.getCount();
         enc3_RPS.put(enc3RotVel);
 
-        Serial.println(enc0RotVel);
+        // Serial.println("enc0: ");
+        // Serial.print(String(enc0_RPS.get()));
+        // Serial.print("   enc0 not share: ");
+        // Serial.print(enc0RotVel);
+        // Serial.print("   enc0 current pos: ");
+        // Serial.print(encoder0.getCount());
+        // Serial << endl;
 
-        vTaskDelayUntil (&xLastWakeTime, ENCODER_PERIOD);
+        // Serial.print(" enc1: ");
+        // Serial.print(String((int32_t)encoder1.getCount()));
+        // Serial.print(" enc2: ");
+        // Serial.print(String((int32_t)encoder2.getCount()));
+        // Serial.print(" enc3: ");
+        // Serial.print(String((int32_t)encoder3.getCount()));
+        // Serial << endl;
+
+        vTaskDelay(100);
     }
 }
