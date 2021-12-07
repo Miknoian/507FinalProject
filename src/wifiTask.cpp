@@ -74,6 +74,6 @@ void wifiTask(void* p_params)
                 } 
             } 
         } 
-        vTaskDelay(10);                                 // Delay 5ms in task
+        vTaskDelay(10);                                 // Delay 10ms in task
     }
 }
