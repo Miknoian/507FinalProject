@@ -1,4 +1,5 @@
 /** @file shares.h
+
  * @brief Header file for shared variables
  * @details Sets up several variables as shared variables to be accessed by other tasks. Defines them as 'externs'
  * meaning they are defined elsewhere
@@ -31,6 +32,5 @@ extern Share<uint32_t> FL_pwm;      // Share for front left wheel PWM
 extern Share<uint32_t> BL_pwm;      // Share for back left wheel PWM
 extern Share<uint32_t> FR_pwm;      // Share for front right wheel PWM
 extern Share<uint32_t> BR_pwm;      // Share for back right wheel PWM
-
 
 #endif // _SHARES_H_

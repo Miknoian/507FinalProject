@@ -21,7 +21,7 @@
 */
 void wifiTask(void* p_params)
 {
-    const char *ssid = "yourAP";    // Arbitrary ssid to connect to on device
+    const char *ssid = "yourAP";    /// Arbitrary ssid to connect to on device
     WiFiServer server(80);          // Set web server at port 80
     String header;                  // String to store the HTTP request
     Serial.println();                                 // Print a blank line to serial monitor
@@ -47,7 +47,7 @@ void wifiTask(void* p_params)
         if (client)                                     // if a new client connects
         {  
             Serial.print("Connected");                         
-            String currentLine = "";                    // 'currentLine' stores the current line of the request
+            String currentLine = "";                    /// 'currentLine' stores the current line of the request
             while (client.connected())                  // While client is connected to access point
             {
                 if (client.available())                 // Check if there are unread characters from the request

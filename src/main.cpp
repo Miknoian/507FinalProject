@@ -14,11 +14,11 @@
 #include "wifiTask.h"
 #include "task_motor.h"          
 
-
 Share<float> enc0_RPS ("en0RPS");       /// Share for encoder 0 data in rad/s
 Share<float> enc1_RPS ("enc1RPS");       /// Share for encoder 1 data in rad/s
 Share<float> enc2_RPS ("en2RPS");       /// Share for encoder 2 data in rad/s
 Share<float> enc3_RPS ("enc3RPS");       /// Share for encoder 3 data in rad/s
+
 
 Share<uint32_t> stickAngle  ("stickangle"); /// Share for joystick angle in degrees
 Share<uint32_t> stickMag  ("stickmag");   /// Share for joystick velocity

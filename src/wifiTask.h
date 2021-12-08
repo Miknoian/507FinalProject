@@ -9,6 +9,8 @@
 #ifndef _WIFITASK_H_
 #define _WIFITASK_H_
 
+
+///@brief Function for WiFi
 void wifiTask(void* p_params);
 
 #endif // _WIFITASK_H_
