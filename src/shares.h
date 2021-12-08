@@ -1,4 +1,4 @@
-/** @file shares.ch
+/** @file shares.h
  * @brief Header file for shared variables
  * @details Sets up several variables as shared variables to be accessed by other tasks. Defines them as 'externs'
  * meaning they are defined elsewhere
