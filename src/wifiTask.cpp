@@ -1,10 +1,7 @@
 /** @file wifiTask.cpp
  * @brief Function to handle all WiFi items
  * @details Function sets up ESP32 as a WiFi access point and then scans for HTTP requests. It reads the HTTP
- * request and stores it in a string. Depending on the string, the function will do different things. The function returns
- * a five digit number (signal), of which the first two digits are the radius of movement as a percentage and the last
- * three are the angle of movement on the joypad.
- * @returns signal An integer value containing data of radius and angle of movement
+ * request and stores it in a string. The string contains PWM and angle data. This data is extracted and put into shared variables.
 */
 
 #include <Arduino.h>
@@ -14,31 +11,28 @@
 #include "shares.h"
 
 /** @brief Function to search for connections and return values
- * @details 
- * @returns
 */
 void wifiTask(void* p_params)
 {
-    const char *ssid = "yourAP";    // Arbitrary ssid to connect to on device
+    const char *ssid = "yourAP";    /// SSID name for device
     WiFiServer server(80);          // Set web server at port 80
-    String header;                  // Storing the HTTP request
+    String header;                  /// String to store the HTTP request
     Serial.println();                                 // Print a blank line to serial monitor
     Serial.println("Configuring access point...");    // Print statement
     WiFi.softAP(ssid);                                // Set ESP to be a soft access point with specified SSID
-    IPAddress myIP = WiFi.softAPIP();                 // Get IP address of access point
+    IPAddress myIP = WiFi.softAPIP();                 /// IP address of our device, the access point
     Serial.print("AP IP address: ");                  // Print access point
     Serial.println(myIP);                             // Print access point
     server.begin();                                   // Blank line
     Serial.println("Server started");                 // Print statement
     uint32_t _signal = 0;                           // Total signal (for use in this file)
-    String PWM;                                     // PWM String from http
-    String angle;                                   // Angle String from http
-    String pwmOne;                                  // First character in PWM string
-    String pwmTwo;                                  // Second character in PWM string
-    String thetaOne;                                // First character in angle string
-    String thetaTwo;                                // Second character in angle string
-    String thetaThree;                              // Third character in angle string
-    // String str_signal;
+    String PWM;                                     /// PWM String from http
+    String angle;                                   /// Angle String from http
+    String pwmOne;                                  /// First character in PWM string
+    String pwmTwo;                                  /// Second character in PWM string
+    String thetaOne;                                /// First character in angle string
+    String thetaTwo;                                /// Second character in angle string
+    String thetaThree;                              /// Third character in angle string
     
     for(;;)
     {   
