@@ -39,9 +39,12 @@ void task_controller (void* p_params)
     float realSpeed[] = {0,0,0,0};
     int32_t integral_error[] = {0,0,0,0};
     int32_t pwm[] = {0,0,0,0};
+    int32_t deriv_error[] = {0,0,0,0};
+    int32_t e_prior[] = {0,0,0,0};
 
     float P_gain = 1;
-    float I_gain = .001;
+    float I_gain = 0.001;
+    float D_gain= 0.0001;
 
     const uint32_t max_pwm = 255;
     const int32_t max_Speed = 50;
@@ -112,16 +115,16 @@ void task_controller (void* p_params)
         {
             pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain;
             //Serial << n << "PWM_P is " << pwm[n] << endl;
-            integral_error[n] += idealSpeed[n]-realSpeed[n];
+            integral_error[n] += idealSpeed[n]-realSpeed[n];  // MULTIPLY BY TIME?? dt
+            deriv_error[n] += ((idealSpeed[n]-realSpeed[n])-(e_prior[n]));// ADDED BY DAN 
+            pwm[n] += (integral_error[n]*I_gain+deriv_error[n]*D_gain);
             
-            pwm[n] += integral_error[n]*I_gain;
-
             //Serial << n << "PWM_I is " << integral_error[n]*I_gain << endl;
             if (pwm[n] > max_pwm)
             {
                 pwm[n] = max_pwm;
             }
-
+            pwm[n] = e_prior[n];
         }
         //Serial << "I_Error is " << integral_error[0] << endl;
 
