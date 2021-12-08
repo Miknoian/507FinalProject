@@ -13,10 +13,10 @@ class Motor
     protected:
 
 
-        uint8_t MOTOR_IN1; /// Pin 1 for motor
-        uint8_t MOTOR_IN2; /// Pin 2 for motor
-        uint8_t PWM_Ch1; /// Channel 1 for PWM
-        uint8_t PWM_Ch2; /// Channel 2 for PWM
+        uint8_t MOTOR_IN1; // Pin 1 for motor
+        uint8_t MOTOR_IN2; // Pin 2 for motor
+        uint8_t PWM_Ch1; // Channel 1 for PWM
+        uint8_t PWM_Ch2; // Channel 2 for PWM
 
     public:
         // Constructor which is given the pins for IN1 and IN2, and the desired channels for PWM.

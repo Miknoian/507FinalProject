@@ -20,10 +20,10 @@
 Motor::Motor (uint8_t M_IN1, uint8_t M_IN2, uint8_t PWM_1, uint8_t PWM_2)
 {
     //Save all inputs for use in functions
-    MOTOR_IN1 = M_IN1; /// Pin 1 for motor
-    MOTOR_IN2 = M_IN2; /// Pin 2 for motor
-    PWM_Ch1 = PWM_1; /// PWM Channel 1
-    PWM_Ch2 = PWM_2; /// PWM Channel 2
+    MOTOR_IN1 = M_IN1; // Pin 1 for motor
+    MOTOR_IN2 = M_IN2; // Pin 2 for motor
+    PWM_Ch1 = PWM_1; // PWM Channel 1
+    PWM_Ch2 = PWM_2; // PWM Channel 2
 }
 
 /** @brief      This function sends the PWM signal to the motor.   

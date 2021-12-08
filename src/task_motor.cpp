@@ -20,10 +20,10 @@
  */
 void task_motor_0 (void* p_params)
 {
-    uint8_t MOTOR_IN1 = 33; /// Pin 1 for motor 1
-    uint8_t MOTOR_IN2 = 25; /// Pin 2 for motor 1
-    uint8_t PWM_Ch1 = 0; /// PWM Channel 1
-    uint8_t PWM_Ch2 = 1; /// PWM Channel 1
+    uint8_t MOTOR_IN1 = 33; // Pin 1 for motor 1
+    uint8_t MOTOR_IN2 = 25; // Pin 2 for motor 1
+    uint8_t PWM_Ch1 = 0; // PWM Channel 1
+    uint8_t PWM_Ch2 = 1; // PWM Channel 1
 
     //Create motor object
     Motor Motor_0 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
@@ -40,10 +40,10 @@ void task_motor_0 (void* p_params)
  */
 void task_motor_1 (void* p_params)
 {
-    uint8_t MOTOR_IN1 = 14; /// Pin 1 for motor 2
-    uint8_t MOTOR_IN2 = 27; /// Pin 2 for motor 2
-    uint8_t PWM_Ch1 = 2; /// PWM Channel 1
-    uint8_t PWM_Ch2 = 3; /// PWM Channel 2
+    uint8_t MOTOR_IN1 = 14; // Pin 1 for motor 2
+    uint8_t MOTOR_IN2 = 27; // Pin 2 for motor 2
+    uint8_t PWM_Ch1 = 2; // PWM Channel 1
+    uint8_t PWM_Ch2 = 3; // PWM Channel 2
 
     Motor Motor_1 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
     //BL
@@ -59,10 +59,10 @@ void task_motor_1 (void* p_params)
  */
 void task_motor_2 (void* p_params)
 {
-    uint8_t MOTOR_IN2 = 18; /// Pin 1 for motor 3
-    uint8_t MOTOR_IN1 = 19; /// Pin 2 for motor 3
-    uint8_t PWM_Ch1 = 4; /// PWM Channel 1
-    uint8_t PWM_Ch2 = 5; /// PWM Channel 2
+    uint8_t MOTOR_IN2 = 18; // Pin 1 for motor 3
+    uint8_t MOTOR_IN1 = 19; // Pin 2 for motor 3
+    uint8_t PWM_Ch1 = 4; // PWM Channel 1
+    uint8_t PWM_Ch2 = 5; // PWM Channel 2
 
     Motor Motor_2 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
     //FR
@@ -78,10 +78,10 @@ void task_motor_2 (void* p_params)
  */
 void task_motor_3 (void* p_params)
 {
-    uint8_t MOTOR_IN2 = 17; /// Pin 1 for motor 4
-    uint8_t MOTOR_IN1 = 5; /// Pin 2 for motor 4
-    uint8_t PWM_Ch1 = 6; /// PWM Channel 1
-    uint8_t PWM_Ch2 = 7; /// PWM Channel 2
+    uint8_t MOTOR_IN2 = 17; // Pin 1 for motor 4
+    uint8_t MOTOR_IN1 = 5; // Pin 2 for motor 4
+    uint8_t PWM_Ch1 = 6; // PWM Channel 1
+    uint8_t PWM_Ch2 = 7; // PWM Channel 2
 
     Motor Motor_3 (MOTOR_IN1, MOTOR_IN2, PWM_Ch1, PWM_Ch2);
     //BR

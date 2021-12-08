@@ -10,7 +10,6 @@
 #include <PrintStream.h>
 #include <ESP32Encoder.h>
 
-/// @brief Function for control
 void task_controller (void* p_params);
 
 #endif

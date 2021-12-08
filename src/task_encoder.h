@@ -11,7 +11,6 @@
 #include <PrintStream.h>
 #include <ESP32Encoder.h>
 
-/// @brief Function to run encoders
 void task_encoder (void* p_params);
 
 #endif
