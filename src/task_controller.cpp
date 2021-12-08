@@ -1,70 +1,75 @@
 /** @file   controller.cpp
- * 
+ *  @brief    Task for PID control loop that manages motor speeds based on reported encoder velocities 
+ *  @details     This task takes inputs from the wifi task to set desired direction and speed, updates motor PWM using
+ *              encoder velocities in PID control loop
  *  @author Joshua Hoye
  *  @date   11/30/2021
  */
  
-/*
-    This task takes inputs from the wifi task to set desired direction and speed, sends the apropriate pwm to the motors, 
-    and takes encoder readings to adjust PWM to achive desired speed. 
-*/
 
-/*NOTE: Incomplete. Not sure if this shoukd be a task of its own or simply a function called by the motor driver. 
 
-Controller function takes a direction input and creates a scaler for the desired speed on each motor. This will 
-then be multiplied by the desired overall nominal speed to get the nominal speed for each motor.
-
-I'm thinking this should be a task and FL, FR, BL, and BR_pwm should be shared variables that go to the motor driver
-*/
 #include <Arduino.h>
 #include <PrintStream.h>
 #include "task_controller.h"
 #include "shares.h"
 
+
+/**
+ * @brief Function to run controller task
+ * @details Controller function takes a direction input and creates a scaler for the desired speed on each motor. This will 
+ * then be multiplied by the desired overall nominal speed to get the nominal speed for each motor. This speed goal is used in the 
+ * PID control loop as a target. Encoder feedback is used to correct PWM signal.
+ */
 void task_controller (void* p_params)
 {   
-    //A scaler that represents the speed relative to the other motors.
+    // A scaler that represents the speed relative to the other motors.
     float FL_relativeSpeed = 0;
     float BL_relativeSpeed = 0;
     float FR_relativeSpeed = 0;
     float BR_relativeSpeed = 0;
 
-    //Represents the ideal rps of the motor
-    // int32_t FL_idealSpeed = 0;
-    // int32_t FR_idealSpeed = 0;
-    // int32_t BL_idealSpeed = 0;
-    // int32_t BR_idealSpeed = 0;
-
+    // speed target based on user input
     double idealSpeed[] = {0,0,0,0};
+
+    // current motor speeds
     float realSpeed[] = {0,0,0,0};
+
+    // integral error for each motor
     int32_t integral_error[] = {0,0,0,0};
+
+    // PWM for each motor
     int32_t pwm[] = {0,0,0,0};
+
+    // derivative error for each motor
     int32_t deriv_error[] = {0,0,0,0};
+
+    // previous error for each motor
     int32_t e_prior[] = {0,0,0,0};
 
-    float P_gain = 1;//3.5;
-    float I_gain = 0;//0.1;
-    float D_gain= 0;//.001;
+    // gains found through physical testing
+    float P_gain = 3.5;
+    float I_gain = .1;
+    float D_gain= .001;
 
-    const uint32_t max_pwm = 255;
-    const int32_t max_Speed = 30;
+    const uint32_t max_pwm = 255;     //desired max PWM signal used to clamp outputs
+    const int32_t max_Speed = 30;     // desired max RPM used to scale output
     
-    uint32_t dir = 0;
-    float mag = 0;
+    uint32_t dir = 0;   // shared motor direction
+    float mag = 0;      // shared motor PWM magnitude
 
     for(;;)
     {
         mag = stickMag.get()/100.0;   //make mag a scaler from 0-1.
-        //Serial << "Original mag is: " << mag << endl;
-        dir = stickAngle.get();
-        //Serial.println("Angle share is: ");
-        //Serial.println(dir);
-        Serial.println("Controller mag is: ");
-        Serial.println(mag);
+        dir = stickAngle.get();     // get user joystick input angle
+
+        // for mechanum wheels, each quadrant of the joystick corresponds to a slightly different control method wheels
+        // For each, two diagonal wheels maintain the max scalled speed, while the two other diagonal wheels scale with direction
+        // this logic before the control loop producing correctly scalled desired speeds for the control loop to work with
+
         //If panning E / NE
         if (dir >= 0 && dir < 90)   //These if statements produce the relative speed of each motor
         {
-            FL_relativeSpeed = -1.0 + 2.0*(dir/90.0);
+            FL_relativeSpeed = -1.0 + 2.0*(dir/90.0);  
             FR_relativeSpeed = 1;
             BL_relativeSpeed = 1;
             BR_relativeSpeed = -1.0 + 2.0*(dir/90.0);
@@ -102,55 +107,36 @@ void task_controller (void* p_params)
             Serial.println("Loop4");
         }
         
-        //Serial << "Mag: " << mag << " Relative Speed: " << FL_relativeSpeed << " Max speed: " << max_Speed << endl;
+        //desired wheel speed multiplied by joystick magnitude input
+
         idealSpeed[0] = mag*FL_relativeSpeed*max_Speed;
         idealSpeed[1] = mag*BL_relativeSpeed*max_Speed;
         idealSpeed[2] = mag*FR_relativeSpeed*max_Speed;
         idealSpeed[3] = mag*BR_relativeSpeed*max_Speed;
 
-        Serial << "Ideal Speed (M1) is " << idealSpeed[0] << endl;
-        Serial << "Ideal Speed (M2) is " << idealSpeed[1] << endl;
-        Serial << "Ideal Speed (M3) is " << idealSpeed[2] << endl;
-        Serial << "Ideal Speed (M4) is " << idealSpeed[3] << endl;
+        //get encoder velocities for control loop
 
         realSpeed[0] = enc0_RPS.get();
         realSpeed[1] = enc1_RPS.get();
         realSpeed[2] = enc2_RPS.get();
         realSpeed[3] = enc3_RPS.get();
-        // Serial << "Real Speed (M1) is " << realSpeed[0] << endl;
-        // Serial << "Real Speed (M2) is " << realSpeed[1] << endl;
-        // Serial << "Real Speed (M3) is " << realSpeed[2] << endl;
-        // Serial << "Real Speed (M4) is " << realSpeed[3] << endl;
-
-        //(mag from wifi)*(255.0/100.0)*abs(relativeSpeed)
 
         for (uint8_t n=0; n < 4; n++)
         {
-            pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain;
-            //Serial << n << "PWM_P is " << pwm[n] << endl;
-           // integral_error[n] += (idealSpeed[n]-realSpeed[n])*(.005);  // MULTIPLY BY TIME?? dt
-            integral_error[n] += (idealSpeed[n]-realSpeed[n]);  // MULTIPLY BY TIME?? dt
-            deriv_error[n] += ((idealSpeed[n]-realSpeed[n])-(e_prior[n]));// ADDED BY DAN 
-            //pwm[n] += integral_error[n]*I_gain;
-            pwm[n] += (integral_error[n]*I_gain+deriv_error[n]*D_gain);
+            pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain; // p control based on speed error
+            integral_error[n] += (idealSpeed[n]-realSpeed[n])*(.005);  // multiply by time step for integral control using previous errors
+            deriv_error[n] += ((idealSpeed[n]-realSpeed[n])-(e_prior[n])); // derivative control using prior error
+            pwm[n] += (integral_error[n]*I_gain+deriv_error[n]*D_gain); // combination of all error for PWM signal
             
-            //Serial << n << "PWM_I is " << integral_error[n]*I_gain << endl;
-            if (pwm[n] > max_pwm)
+            // clamp logic for max PWM
+            if (pwm[n] > max_pwm)    
             {
                 pwm[n] = max_pwm;
             }
             e_prior[n] = idealSpeed[n] - realSpeed[n];
         }
-        //Serial << "I_Error is " << integral_error[0] << endl;
 
-        Serial << "PWM is (M1) " << pwm[0] << endl;
-        Serial << "PWM is (M2) " << pwm[1] << endl;
-        Serial << "PWM is (M3) " << pwm[2] << endl;
-        Serial << "PWM is (M4) " << pwm[3] << endl;
-        //Serial.println("PWM is: ");
-        //Serial.println(pwm[0]);
-
-        //Serial << pwm[0] << endl;
+        // send updated PWM to motor tasks
         FL_pwm.put(pwm[0]);
         BL_pwm.put(pwm[1]);
         FR_pwm.put(pwm[2]);
@@ -196,10 +182,6 @@ void task_controller (void* p_params)
         {
             BR_dir.put(0); // Spin motor backward
         }
-
-
-
-
-       vTaskDelay(10);
+       vTaskDelay(5);  // 10 ms task period
     }
 }
