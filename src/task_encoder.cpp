@@ -32,7 +32,7 @@ void task_encoder (void* p_params)
 {
 
     ESP32Encoder encoder0;                      /// Encoder 0 object of class ESP32Encoder
-    encoder0.attachFullQuad(INPUT1, INPUT2);
+    encoder0.attachFullQuad(INPUT1, INPUT2);    
     encoder0.setCount(0);
     encoder0.resumeCount();
 
@@ -68,12 +68,21 @@ void task_encoder (void* p_params)
 
     for(;;)
     {
-        previousTime = currentTime;
-        currentTime = xTaskGetTickCount();
+        previousTime = currentTime;                 /// Set time recorded in previous iteration                         
+        currentTime = xTaskGetTickCount();          /// Get current time in ms
 
-        enc0RotVel = ((encoder0.getCount()-enc0PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);
-        enc0PrevPos = encoder0.getCount();
-        enc0_RPS.put(enc0RotVel);
+        /// find rotational velocity in radians per second by calculating delta position/delta time * ticks to radian per second conversion
+        /// 1000 -> ms to s
+        /// 2*3.1416 -> 1 revolution in radians
+        /// 230.70 -> ticks per revolution
+
+        /// note: this method of calculating velocity producing poor results at low speeds. 
+        /// Increasing the task period provides better sampling and improves accuracy/resolution at low speeds at the cost of update frequency
+        /// A better way of doing this would be to log when encoder interupts happen and update velocity for each tick, or a more advanced algorithm 
+
+        enc0RotVel = ((encoder0.getCount()-enc0PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);     
+        enc0PrevPos = encoder0.getCount();        /// update encoder count for next iteration
+        enc0_RPS.put(enc0RotVel);       /// put into share for controller task
 
         enc1RotVel = ((encoder1.getCount()-enc1PrevPos)*1000*2*3.1416)/((currentTime-previousTime)*230.70);
         enc1PrevPos = encoder1.getCount();
@@ -87,6 +96,6 @@ void task_encoder (void* p_params)
         enc3PrevPos = encoder3.getCount();
         enc3_RPS.put(enc3RotVel);
 
-        vTaskDelay(100);
+        vTaskDelay(100);            /// run task every 100 ms
     }
 }

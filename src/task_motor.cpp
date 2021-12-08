@@ -15,7 +15,9 @@
 //For these motors, copy paste the following into the setup of the main file:
 //Pins we cant use for PWM:    34, 35, 36, 37, 38, 39
 
-/// @brief Function to run Motor 1
+/**
+ * @brief Function to run Motor 1
+ */
 void task_motor_0 (void* p_params)
 {
     uint8_t MOTOR_IN1 = 33; /// Pin 1 for motor 1
@@ -33,7 +35,9 @@ void task_motor_0 (void* p_params)
     }
 }
 
-/// @brief Function to run Motor 2
+/**
+ * @brief Function to run Motor 2
+ */
 void task_motor_1 (void* p_params)
 {
     uint8_t MOTOR_IN1 = 14; /// Pin 1 for motor 2
@@ -50,7 +54,9 @@ void task_motor_1 (void* p_params)
     }
 }
 
-/// @brief Function to run Motor 3
+/**
+ * @brief Function to run Motor 3
+ */
 void task_motor_2 (void* p_params)
 {
     uint8_t MOTOR_IN2 = 18; /// Pin 1 for motor 3
@@ -67,7 +73,9 @@ void task_motor_2 (void* p_params)
     }
 }
 
-/// @brief Function to run Motor 4
+/**
+ * @brief Function to run Motor 4
+ */
 void task_motor_3 (void* p_params)
 {
     uint8_t MOTOR_IN2 = 17; /// Pin 1 for motor 4

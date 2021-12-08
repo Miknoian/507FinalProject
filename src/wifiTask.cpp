@@ -61,11 +61,11 @@ void wifiTask(void* p_params)
                     {
                         pwmOne = currentLine[5];        //5th Character in header (first number in PWM)
                         pwmTwo = currentLine[6];        //6th Character in header (second number in PWM)
-                        thetaOne = currentLine[7];
-                        thetaTwo = currentLine[8];
-                        thetaThree = currentLine[9]; 
-                        angle = thetaOne+thetaTwo+thetaThree;                       
-                        PWM = pwmOne+pwmTwo;                                        
+                        thetaOne = currentLine[7];              //7th character in header (angle digit 1)
+                        thetaTwo = currentLine[8];              //8th character in header (angle digit 2)
+                        thetaThree = currentLine[9];            //9th character in header (angle digit 3)
+                        angle = thetaOne+thetaTwo+thetaThree;       /// final angle with all digits (as string)    
+                        PWM = pwmOne+pwmTwo;                         /// final pwm with all digits (as string)               
                         stickMag.put(PWM.toInt());      // Put the integer PWM into a shared variable
                         stickAngle.put(angle.toInt());  // Put the integer angle into a shared variable
                         break;                          // Return from loop

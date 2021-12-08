@@ -12,6 +12,10 @@
 
 /** @brief      Constructor for brushed motor object.   
  *  @details    This constructor creates a motor object with its specified control pins and timing channels.
+ *  @param      M_IN1 Motor driver input pin 1
+ *  @param      M_IN2 Motor driver input pin 2
+ *  @param      PWM_1 PWM channel 1
+ *  @param      PWM_2 PWM channel 2
  */
 Motor::Motor (uint8_t M_IN1, uint8_t M_IN2, uint8_t PWM_1, uint8_t PWM_2)
 {
@@ -24,6 +28,8 @@ Motor::Motor (uint8_t M_IN1, uint8_t M_IN2, uint8_t PWM_1, uint8_t PWM_2)
 
 /** @brief      This function sends the PWM signal to the motor.   
  *  @details    This function writes the given PWM signal to the appropriate timing channel based on the direction.  
+ *  @param      PWM PWM to set
+ *  @param      dir Desired dir as bool
  */
 void Motor::run (uint8_t PWM, bool dir)
 {
