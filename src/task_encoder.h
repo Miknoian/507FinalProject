@@ -1,8 +1,9 @@
 /** @file task_encoder.h
- * @brief Header for encoder task 
- * @author Mark Iknoian
- * @date 05-Dec-2021
+ * @brief Header file for task_encoder.cpp
+* @author Mark Iknoian
+* @date 12/7/2021
 */
+
 #ifndef _TASK_ENCODER_H_
 #define _TASK_ENCODER_H_
 
