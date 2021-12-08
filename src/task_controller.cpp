@@ -35,16 +35,16 @@ void task_controller (void* p_params)
     // int32_t BL_idealSpeed = 0;
     // int32_t BR_idealSpeed = 0;
 
-    int32_t idealSpeed[] = {0,0,0,0};
+    double idealSpeed[] = {0,0,0,0};
     float realSpeed[] = {0,0,0,0};
     int32_t integral_error[] = {0,0,0,0};
     int32_t pwm[] = {0,0,0,0};
     int32_t deriv_error[] = {0,0,0,0};
     int32_t e_prior[] = {0,0,0,0};
 
-    float P_gain = 3.5;
-    float I_gain = 0.1;
-    float D_gain= 0.001;
+    float P_gain = 1;//3.5;
+    float I_gain = 0;//0.1;
+    float D_gain= 0;//.001;
 
     const uint32_t max_pwm = 255;
     const int32_t max_Speed = 30;
@@ -54,19 +54,21 @@ void task_controller (void* p_params)
 
     for(;;)
     {
-        mag = stickMag.get()/100;   //make mag a scaler from 0-1.
+        mag = stickMag.get()/100.0;   //make mag a scaler from 0-1.
         //Serial << "Original mag is: " << mag << endl;
         dir = stickAngle.get();
         //Serial.println("Angle share is: ");
         //Serial.println(dir);
-       
+        Serial.println("Controller mag is: ");
+        Serial.println(mag);
         //If panning E / NE
         if (dir >= 0 && dir < 90)   //These if statements produce the relative speed of each motor
         {
-            FL_relativeSpeed = -1 + 2*(dir/90);
+            FL_relativeSpeed = -1.0 + 2.0*(dir/90.0);
             FR_relativeSpeed = 1;
             BL_relativeSpeed = 1;
-            BR_relativeSpeed = -1 + 2*(dir/90);
+            BR_relativeSpeed = -1.0 + 2.0*(dir/90.0);
+            Serial.println("Loop1");
         }
 
         //If panning N/NW
@@ -74,27 +76,30 @@ void task_controller (void* p_params)
         {
             //Serial << "Moving North" << endl;
             FL_relativeSpeed = 1;
-            FR_relativeSpeed = 1-2*((dir-90)/90);
-            BL_relativeSpeed = 1-2*((dir-90)/90);
+            FR_relativeSpeed = 1.0-2.0*((dir-90.0)/90.0);
+            BL_relativeSpeed = 1.0-2.0*((dir-90.0)/90.0);
             BR_relativeSpeed = 1;
+            Serial.println("Loop2");
         }
 
         //If panning W/SW
         if (dir-180 >= 0 && dir-180 < 90)
         {
-            FL_relativeSpeed = 1-2*((dir-180)/90);
+            FL_relativeSpeed = 1.0-2.0*((dir-180.0)/90.0);
             FR_relativeSpeed = -1;
             BL_relativeSpeed = -1;
-            BR_relativeSpeed = 1-2*((dir-180)/90);
+            BR_relativeSpeed = 1.0-2.0*((dir-180.0)/90.0);
+            Serial.println("Loop3");
         }
 
         //If panning S/SE
         if (dir-270 >= 0 && dir-270 < 90)
         {
             FL_relativeSpeed = -1;
-            FR_relativeSpeed = -1 + 2*((dir-270)/90);
-            BL_relativeSpeed = -1 + 2*((dir-270)/90);
+            FR_relativeSpeed = -1.0 + 2.0*((dir-270.0)/90.0);
+            BL_relativeSpeed = -1.0 + 2.0*((dir-270.0)/90.0);
             BR_relativeSpeed = -1;
+            Serial.println("Loop4");
         }
         
         //Serial << "Mag: " << mag << " Relative Speed: " << FL_relativeSpeed << " Max speed: " << max_Speed << endl;
@@ -103,10 +108,10 @@ void task_controller (void* p_params)
         idealSpeed[2] = mag*FR_relativeSpeed*max_Speed;
         idealSpeed[3] = mag*BR_relativeSpeed*max_Speed;
 
-        // Serial << "Ideal Speed (M1) is " << idealSpeed[0] << endl;
-        // Serial << "Ideal Speed (M2) is " << idealSpeed[1] << endl;
-        // Serial << "Ideal Speed (M3) is " << idealSpeed[2] << endl;
-        // Serial << "Ideal Speed (M4) is " << idealSpeed[3] << endl;
+        Serial << "Ideal Speed (M1) is " << idealSpeed[0] << endl;
+        Serial << "Ideal Speed (M2) is " << idealSpeed[1] << endl;
+        Serial << "Ideal Speed (M3) is " << idealSpeed[2] << endl;
+        Serial << "Ideal Speed (M4) is " << idealSpeed[3] << endl;
 
         realSpeed[0] = enc0_RPS.get();
         realSpeed[1] = enc1_RPS.get();
@@ -116,6 +121,8 @@ void task_controller (void* p_params)
         // Serial << "Real Speed (M2) is " << realSpeed[1] << endl;
         // Serial << "Real Speed (M3) is " << realSpeed[2] << endl;
         // Serial << "Real Speed (M4) is " << realSpeed[3] << endl;
+
+        //(mag from wifi)*(255.0/100.0)*abs(relativeSpeed)
 
         for (uint8_t n=0; n < 4; n++)
         {
@@ -136,10 +143,10 @@ void task_controller (void* p_params)
         }
         //Serial << "I_Error is " << integral_error[0] << endl;
 
-        // Serial << "PWM is (M1) " << pwm[0] << endl;
-        // Serial << "PWM is (M2) " << pwm[1] << endl;
-        // Serial << "PWM is (M3) " << pwm[2] << endl;
-        // Serial << "PWM is (M4) " << pwm[3] << endl;
+        Serial << "PWM is (M1) " << pwm[0] << endl;
+        Serial << "PWM is (M2) " << pwm[1] << endl;
+        Serial << "PWM is (M3) " << pwm[2] << endl;
+        Serial << "PWM is (M4) " << pwm[3] << endl;
         //Serial.println("PWM is: ");
         //Serial.println(pwm[0]);
 
@@ -149,6 +156,50 @@ void task_controller (void* p_params)
         FR_pwm.put(pwm[2]);
         BR_pwm.put(pwm[3]);
 
-       vTaskDelay(5);
+        
+        //Set the direction share based on the relative speed
+        if (FL_relativeSpeed > 0)
+        {
+            FL_dir.put(1); // Spin motor forward
+        }
+        else
+        {
+            FL_dir.put(0); // Spin motor backward
+        }
+
+        //Set the direction share based on the relative speed
+        if (BL_relativeSpeed > 0)
+        {
+            BL_dir.put(1); // Spin motor forward
+        }
+        else
+        {
+            BL_dir.put(0); // Spin motor backward
+        }
+
+        //Set the direction share based on the relative speed
+        if (FR_relativeSpeed > 0)
+        {
+            FR_dir.put(1); // Spin motor forward
+        }
+        else
+        {
+            FR_dir.put(0); // Spin motor backward
+        }
+
+        //Set the direction share based on the relative speed
+        if (BR_relativeSpeed > 0)
+        {
+            BR_dir.put(1); // Spin motor forward
+        }
+        else
+        {
+            BR_dir.put(0); // Spin motor backward
+        }
+
+
+
+
+       vTaskDelay(10);
     }
 }

@@ -51,9 +51,9 @@ void task_motor_0 (void* p_params)
     //FL
     for (;;)
     {
-        mag = FL_pwm.get();
-        Motor_0.run(mag, 1);
-        vTaskDelay(5);
+        
+        Motor_0.run(FL_pwm.get(), FL_dir.get());
+        vTaskDelay(10);
     }
 }
 
@@ -68,9 +68,8 @@ void task_motor_1 (void* p_params)
     //BL
     for (;;)
     {
-        mag = BL_pwm.get();
-        Motor_1.run(mag, 1);
-        vTaskDelay(5);
+        Motor_1.run(BL_pwm.get(), BL_dir.get());
+        vTaskDelay(10);
     }
 }
 
@@ -85,9 +84,8 @@ void task_motor_2 (void* p_params)
     //FR
     for (;;)
     {
-        mag = FR_pwm.get();
-        Motor_2.run(mag, 1);
-        vTaskDelay(5);
+        Motor_2.run(FR_pwm.get(), FR_dir.get());
+        vTaskDelay(10);
     }
 }
 
@@ -102,8 +100,7 @@ void task_motor_3 (void* p_params)
     //BR
     for (;;)
     {
-        mag = BR_pwm.get();
-        Motor_3.run(mag, 1);
-        vTaskDelay(5); 
+        Motor_3.run(BR_pwm.get(), BR_dir.get());
+        vTaskDelay(10); 
     }
 }

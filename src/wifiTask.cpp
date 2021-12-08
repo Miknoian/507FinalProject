@@ -25,7 +25,6 @@ void wifiTask(void* p_params)
     Serial.println(myIP);                             // Print access point
     server.begin();                                   // Blank line
     Serial.println("Server started");                 // Print statement
-    uint32_t _signal = 0;                           // Total signal (for use in this file)
     String PWM;                                     /// PWM String from http
     String angle;                                   /// Angle String from http
     String pwmOne;                                  /// First character in PWM string
@@ -64,31 +63,17 @@ void wifiTask(void* p_params)
                         thetaOne = currentLine[7];
                         thetaTwo = currentLine[8];
                         thetaThree = currentLine[9]; 
-                        // Serial.println("currentLine[5] is: ");
-                        // Serial.println(currentLine[5]); 
-                        // Serial.println("currentLine[6] is: ");
-                        // Serial.println(currentLine[6]); 
-                        // Serial.println("currentLine[7] is: ");
-                        // Serial.println(currentLine[7]); 
-                        // Serial.println("currentLine[8] is: ");
-                        // Serial.println(currentLine[8]); 
-                        // Serial.println("currentLine[9] is: ");
-                        // Serial.println(currentLine[9]); 
                         angle = thetaOne+thetaTwo+thetaThree;                       // Total angle as a string of characters
                         PWM = pwmOne+pwmTwo;                                        // Total PWM as a string of characters
-                        //Serial.println("Angle is: ");
-                        //Serial.println(angle.toInt());
-                        // Serial.println("Mag is: ");
-                        // Serial.println(PWM.toInt());
                         stickAngle.put(angle.toInt());
                         stickMag.put(PWM.toInt());
-                        
-                        //Serial.println(stickAngle.get());
+                        Serial.println("WiFi mag is: ");
+                        Serial.println(PWM.toInt());
                         break;
                     }
                 } 
             } 
         } 
-        vTaskDelay(5); // Delay 5ms in task
-        }
+        vTaskDelay(5); // Delay 10ms in task
+    }
 }

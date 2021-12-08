@@ -68,7 +68,7 @@ void setup()
 
     xTaskCreate (wifiTask,
                 "WIFI",
-                8192,
+                16384,
                 NULL,
                 1,
                 NULL);
