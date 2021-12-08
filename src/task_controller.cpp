@@ -42,21 +42,21 @@ void task_controller (void* p_params)
     int32_t deriv_error[] = {0,0,0,0};
     int32_t e_prior[] = {0,0,0,0};
 
-    float P_gain = 1;
-    float I_gain = 0.001;
-    float D_gain= 0.0001;
+    float P_gain = 3.5;
+    float I_gain = 0.1;
+    float D_gain= 0.001;
 
     const uint32_t max_pwm = 255;
-    const int32_t max_Speed = 50;
+    const int32_t max_Speed = 30;
     
     uint32_t dir = 0;
     float mag = 0;
 
     for(;;)
     {
-        mag = 1;//stickMag.get()/100;   //make mag a scaler from 0-1.
+        mag = stickMag.get()/100;   //make mag a scaler from 0-1.
         //Serial << "Original mag is: " << mag << endl;
-        dir = 90;//stickAngle.get();
+        dir = stickAngle.get();
         //Serial.println("Angle share is: ");
         //Serial.println(dir);
        
@@ -96,27 +96,35 @@ void task_controller (void* p_params)
             BL_relativeSpeed = -1 + 2*((dir-270)/90);
             BR_relativeSpeed = -1;
         }
-        vTaskDelay(5);
         
         //Serial << "Mag: " << mag << " Relative Speed: " << FL_relativeSpeed << " Max speed: " << max_Speed << endl;
         idealSpeed[0] = mag*FL_relativeSpeed*max_Speed;
-        //Serial << "Ideal Speed is " << idealSpeed[0] << endl;
         idealSpeed[1] = mag*BL_relativeSpeed*max_Speed;
         idealSpeed[2] = mag*FR_relativeSpeed*max_Speed;
         idealSpeed[3] = mag*BR_relativeSpeed*max_Speed;
+
+        // Serial << "Ideal Speed (M1) is " << idealSpeed[0] << endl;
+        // Serial << "Ideal Speed (M2) is " << idealSpeed[1] << endl;
+        // Serial << "Ideal Speed (M3) is " << idealSpeed[2] << endl;
+        // Serial << "Ideal Speed (M4) is " << idealSpeed[3] << endl;
 
         realSpeed[0] = enc0_RPS.get();
         realSpeed[1] = enc1_RPS.get();
         realSpeed[2] = enc2_RPS.get();
         realSpeed[3] = enc3_RPS.get();
-        //Serial << "Real Speed is " << realSpeed[0] << endl;
+        // Serial << "Real Speed (M1) is " << realSpeed[0] << endl;
+        // Serial << "Real Speed (M2) is " << realSpeed[1] << endl;
+        // Serial << "Real Speed (M3) is " << realSpeed[2] << endl;
+        // Serial << "Real Speed (M4) is " << realSpeed[3] << endl;
 
-        for (int n=0; n <= 3; n++)
+        for (uint8_t n=0; n < 4; n++)
         {
             pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain;
             //Serial << n << "PWM_P is " << pwm[n] << endl;
-            integral_error[n] += idealSpeed[n]-realSpeed[n];  // MULTIPLY BY TIME?? dt
+           // integral_error[n] += (idealSpeed[n]-realSpeed[n])*(.005);  // MULTIPLY BY TIME?? dt
+            integral_error[n] += (idealSpeed[n]-realSpeed[n]);  // MULTIPLY BY TIME?? dt
             deriv_error[n] += ((idealSpeed[n]-realSpeed[n])-(e_prior[n]));// ADDED BY DAN 
+            //pwm[n] += integral_error[n]*I_gain;
             pwm[n] += (integral_error[n]*I_gain+deriv_error[n]*D_gain);
             
             //Serial << n << "PWM_I is " << integral_error[n]*I_gain << endl;
@@ -124,11 +132,14 @@ void task_controller (void* p_params)
             {
                 pwm[n] = max_pwm;
             }
-            pwm[n] = e_prior[n];
+            e_prior[n] = idealSpeed[n] - realSpeed[n];
         }
         //Serial << "I_Error is " << integral_error[0] << endl;
 
-        //Serial << "PWM is " << pwm[0] << endl << endl << endl;
+        // Serial << "PWM is (M1) " << pwm[0] << endl;
+        // Serial << "PWM is (M2) " << pwm[1] << endl;
+        // Serial << "PWM is (M3) " << pwm[2] << endl;
+        // Serial << "PWM is (M4) " << pwm[3] << endl;
         //Serial.println("PWM is: ");
         //Serial.println(pwm[0]);
 
@@ -138,12 +149,6 @@ void task_controller (void* p_params)
         FR_pwm.put(pwm[2]);
         BR_pwm.put(pwm[3]);
 
-        /*
-        FL_pwm = dir*mag*max_pwm;
-        FR_pwm = dir*mag*max_pwm;
-        BL_pwm = dir*mag*max_pwm;
-        BR_pwm = dir*mag*max_pwm;
-        */
-
+       vTaskDelay(5);
     }
 }

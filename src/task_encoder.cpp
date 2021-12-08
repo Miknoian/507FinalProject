@@ -12,8 +12,8 @@
 #include "shares.h"
 
 //Encoder 0
-const uint8_t INPUT1 = 32;                      /// Pin for encoder 0 channel 1
-const uint8_t INPUT2 = 35;                      /// Pin for encoder 0 channel 2
+const uint8_t INPUT1 = 35;                      /// Pin for encoder 0 channel 1
+const uint8_t INPUT2 = 32;                      /// Pin for encoder 0 channel 2
 
 //Encoder 1
 const uint8_t INPUT3 = 10;                      /// Pin for encoder 1 channel 1

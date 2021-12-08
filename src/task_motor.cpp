@@ -53,7 +53,7 @@ void task_motor_0 (void* p_params)
     {
         mag = FL_pwm.get();
         Motor_0.run(mag, 1);
-        vTaskDelay(2000);
+        vTaskDelay(5);
     }
 }
 
@@ -85,11 +85,9 @@ void task_motor_2 (void* p_params)
     //FR
     for (;;)
     {
-        
         mag = FR_pwm.get();
         Motor_2.run(mag, 1);
         vTaskDelay(5);
-
     }
 }
 
@@ -104,7 +102,6 @@ void task_motor_3 (void* p_params)
     //BR
     for (;;)
     {
-        //
         mag = BR_pwm.get();
         Motor_3.run(mag, 1);
         vTaskDelay(5); 
