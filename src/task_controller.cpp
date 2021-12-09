@@ -61,44 +61,44 @@ void task_controller (void* p_params)
         //Serial.println(dir);
         Serial.println("Controller mag is: ");
         Serial.println(mag);
-        //If panning E / NE
-        if (dir >= 0 && dir < 90)   //These if statements produce the relative speed of each motor
+        //If panning E Checked
+        if (dir-90 >= 0 && dir-90 < 90)   //These if statements produce the relative speed of each motor
         {
-            FL_relativeSpeed = -1.0 + 2.0*(dir/90.0);
-            FR_relativeSpeed = 1;
-            BL_relativeSpeed = 1;
-            BR_relativeSpeed = -1.0 + 2.0*(dir/90.0);
+            FL_relativeSpeed = -1;//-1.0 + 2.0*((dir-90)/90.0);
+            FR_relativeSpeed = 1-2.0*((dir-90.0)/90.0);
+            BL_relativeSpeed = 1-2.0*((dir-90.0)/90.0);
+            BR_relativeSpeed = -1;//-1.0 + 2.0*((dir-90)/90.0);
             Serial.println("Loop1");
         }
 
-        //If panning N/NW
-        if (dir-90 >= 0 && dir-90 < 90)
+        //If panning N Checked
+        if (dir >= 0 && dir < 90)
         {
             //Serial << "Moving North" << endl;
-            FL_relativeSpeed = 1;
-            FR_relativeSpeed = 1.0-2.0*((dir-90.0)/90.0);
-            BL_relativeSpeed = 1.0-2.0*((dir-90.0)/90.0);
-            BR_relativeSpeed = 1;
+            FL_relativeSpeed = 1.0-2.0*((dir)/90.0);
+            FR_relativeSpeed = 1;
+            BL_relativeSpeed = 1;
+            BR_relativeSpeed = 1.0-2.0*((dir)/90.0);
             Serial.println("Loop2");
         }
 
-        //If panning W/SW
-        if (dir-180 >= 0 && dir-180 < 90)
+        //If panning W
+        if (dir-270 >= 0 && dir-270 < 90)
         {
-            FL_relativeSpeed = 1.0-2.0*((dir-180.0)/90.0);
-            FR_relativeSpeed = -1;
-            BL_relativeSpeed = -1;
-            BR_relativeSpeed = 1.0-2.0*((dir-180.0)/90.0);
+            FL_relativeSpeed = 1; //1.0-2.0*((dir-270.0)/90.0);
+            FR_relativeSpeed = -1 + 2.0*((dir-270.0)/90.0);
+            BL_relativeSpeed = -1 + 2.0*((dir-270.0)/90.0);
+            BR_relativeSpeed = 1; //1.0-2.0*((dir-270.0)/90.0);
             Serial.println("Loop3");
         }
 
-        //If panning S/SE
-        if (dir-270 >= 0 && dir-270 < 90)
+        //If panning S Checked
+        if (dir-180 >= 0 && dir-180 < 90)
         {
-            FL_relativeSpeed = -1;
-            FR_relativeSpeed = -1.0 + 2.0*((dir-270.0)/90.0);
-            BL_relativeSpeed = -1.0 + 2.0*((dir-270.0)/90.0);
-            BR_relativeSpeed = -1;
+            FL_relativeSpeed = -1 + 2.0*((dir-180)/90.0);
+            FR_relativeSpeed = -1.0;// 
+            BL_relativeSpeed = -1.0;//
+            BR_relativeSpeed = -1 + 2.0*((dir-180)/90.0);
             Serial.println("Loop4");
         }
         
@@ -123,23 +123,29 @@ void task_controller (void* p_params)
         // Serial << "Real Speed (M4) is " << realSpeed[3] << endl;
 
         //(mag from wifi)*(255.0/100.0)*abs(relativeSpeed)
+        //Controller bypass code:
+        pwm[0] = mag*100*(175/100.0)*abs(FL_relativeSpeed);
+        pwm[1] = mag*100*(175/100.0)*abs(BL_relativeSpeed);
+        pwm[2] = mag*100*(175/100.0)*abs(FR_relativeSpeed);
+        pwm[3] = mag*100*(175/100.0)*abs(BR_relativeSpeed);
+
 
         for (uint8_t n=0; n < 4; n++)
         {
-            pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain;
-            //Serial << n << "PWM_P is " << pwm[n] << endl;
-           // integral_error[n] += (idealSpeed[n]-realSpeed[n])*(.005);  // MULTIPLY BY TIME?? dt
-            integral_error[n] += (idealSpeed[n]-realSpeed[n]);  // MULTIPLY BY TIME?? dt
-            deriv_error[n] += ((idealSpeed[n]-realSpeed[n])-(e_prior[n]));// ADDED BY DAN 
-            //pwm[n] += integral_error[n]*I_gain;
-            pwm[n] += (integral_error[n]*I_gain+deriv_error[n]*D_gain);
+        //     pwm[n] = (idealSpeed[n]-realSpeed[n])*P_gain;
+        //     //Serial << n << "PWM_P is " << pwm[n] << endl;
+        //    // integral_error[n] += (idealSpeed[n]-realSpeed[n])*(.005);  // MULTIPLY BY TIME?? dt
+        //     integral_error[n] += (idealSpeed[n]-realSpeed[n]);  // MULTIPLY BY TIME?? dt
+        //     deriv_error[n] += ((idealSpeed[n]-realSpeed[n])-(e_prior[n]));// ADDED BY DAN 
+        //     //pwm[n] += integral_error[n]*I_gain;
+        //     pwm[n] += (integral_error[n]*I_gain+deriv_error[n]*D_gain);
             
-            //Serial << n << "PWM_I is " << integral_error[n]*I_gain << endl;
-            if (pwm[n] > max_pwm)
-            {
-                pwm[n] = max_pwm;
-            }
-            e_prior[n] = idealSpeed[n] - realSpeed[n];
+        //     //Serial << n << "PWM_I is " << integral_error[n]*I_gain << endl;
+        //     if (pwm[n] > max_pwm)
+        //     {
+        //         pwm[n] = max_pwm;
+        //     }
+        //     e_prior[n] = idealSpeed[n] - realSpeed[n];
         }
         //Serial << "I_Error is " << integral_error[0] << endl;
 
